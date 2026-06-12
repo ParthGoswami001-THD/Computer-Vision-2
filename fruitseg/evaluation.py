@@ -99,8 +99,15 @@ def metrics_from_confusion(confusion, names):
     return out
 
 
-def print_report(result):
-    """!Pretty-print the confusion matrix and metrics to stdout."""
+def print_report(result, show_files=True):
+    """!Pretty-print the confusion matrix, metrics, and per-file results.
+
+    @param result      dict returned by evaluate_classification.
+    @param show_files  if True, list every wrongly-classified file and
+                       summarise correctly-classified ones by class
+                       (satisfies the assignment's "file names and results"
+                       documentation requirement).
+    """
     names = result["labels"]
     conf = result["confusion"]
     w = max(len(s) for s in names) + 1
@@ -114,5 +121,32 @@ def print_report(result):
     for name, d in m["per_class"].items():
         print(f"{name:<{w}} {d['precision']:>6.3f} {d['recall']:>7.3f} "
               f"{d['f1']:>6.3f} {d['support']:>5d}")
-    print(f"\nCorrect: {len(result['correct_files'])}   "
-          f"Wrong: {len(result['wrong_files'])}")
+
+    correct = result["correct_files"]
+    wrong = result["wrong_files"]
+    print(f"\nCorrect: {len(correct)}   Wrong/rejected: {len(wrong)}")
+
+    if not show_files:
+        return
+
+    # --- correctly-classified files grouped by class --------------------------
+    if correct:
+        print("\n--- CORRECT classifications ---")
+        by_class = {}
+        for path, true_name in correct:
+            by_class.setdefault(true_name, []).append(path)
+        for cls, paths in sorted(by_class.items()):
+            print(f"  {cls} ({len(paths)} files):")
+            for p in paths:
+                print(f"    {p}")
+
+    # --- wrongly-classified / rejected files ----------------------------------
+    if wrong:
+        print("\n--- WRONG / REJECTED classifications ---")
+        for entry in wrong:
+            if len(entry) == 3:
+                path, true_name, pred_name = entry
+            else:
+                path, true_name, pred_name = entry[0], entry[1], "background"
+            print(f"  {path}")
+            print(f"    true={true_name}  predicted={pred_name}")

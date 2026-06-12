@@ -21,8 +21,93 @@ algorithm operating in the HSV colour space**. The pipeline must:
 4. classify each region using one homogeneity criterion (e.g. mean hue + variance of
    saturation).
 
-Development and parameter tuning use the **Fruits-360 Train** folder only; validation uses
-the **Fruits-360 Test** folder, and a proof-of-concept is shown on **Fruits-262** [9], [10].
+Development and parameter tuning use the **Fruits-360 Train** folder only. Validation uses
+the **Fruits-360 Test** folder. Realistic image testing uses the Fruits-360
+`test-multiple_fruits` folder first, then selected scene images from **Fruits-262** [9], [10].
+
+---
+
+## 0.1 Fruit class selection — choosing and ranking 10 classes
+
+### 0.1.1 Scanning the Training folder
+
+The Fruits-360 Training folder contains more than 130 fruit classes, many of which share
+a very similar hue (e.g. all red-apple varieties, multiple tomato cultivars, several
+orange/nectarine hybrids). Selecting 10 classes that an HSV-based nearest-neighbour
+classifier can reliably separate therefore requires an explicit analysis of the colour
+statistics of *every* available class before a single classification decision is made.
+
+All Training classes were scanned and their per-class HSV statistics (circular mean hue,
+mean saturation, mean value, circular variance of hue) were computed and written to
+`results/fruits360_training_hsv_by_class_sorted_hue.csv`. This file lists every Fruits-360
+class sorted by mean hue angle, making hue collisions immediately visible.
+
+### 0.1.2 Selection criterion
+
+The primary selection criterion is **maximum spread of mean hue** across the 360° colour
+wheel, because hue is the most reliable chromatic discriminator in HSV space (§1). A
+secondary criterion is **sufficient mean saturation** (S ≥ 0.40): highly desaturated
+classes (e.g. white mushrooms, brown chestnuts) have unstable hue and would rely entirely
+on saturation/value features, which are weak discriminators at low saturation. A third
+criterion is **avoidance of known hue collisions**: pairs of classes whose circular mean
+hue differs by less than ~15° were treated as a single slot, and only the most
+photogenic representative was kept.
+
+### 0.1.3 The selected 10 classes and their mean hue
+
+The following table gives the measured Training-set mean hue (in degrees, 0° = red,
+120° = green, 240° = blue) for each selected class, sorted around the colour wheel.
+Values are taken directly from `results/fruits360_training_hsv_by_class_sorted_hue.csv`.
+
+| Rank | Fruits-360 folder | Display name | Mean hue (°) | Colour zone | Overlay (BGR) |
+|------|------------------|--------------|:------------:|-------------|---------------|
+| 1  | `Lychee 1`           | Lychee       | 0.8°         | Red (pale, bright) | pale pink |
+| 2  | `Apple Red 1`        | Apple        | 10.3°        | Red (dark)         | dark red  |
+| 3  | `Orange 1`           | Orange       | 27.4°        | Orange             | orange    |
+| 4  | `Banana 1`           | Banana       | 43.1°        | Yellow             | yellow    |
+| 5  | `Avocado 1`          | Avocado      | 71.5°        | Yellow-green (dark)| green     |
+| 6  | `Cucumber 1`         | Cucumber     | 103.3°       | Green              | lime      |
+| 7  | `Cucumber 3`         | Cucumber 3   | 176.3°       | Cyan-green         | cyan      |
+| 8  | `Huckleberry 1`      | Huckleberry  | 220.2°       | Blue               | blue      |
+| 9  | `Raspberry 1`        | Raspberry    | 271.9°       | Purple-blue        | purple    |
+| 10 | `Cherry Wax Black 1` | Cherry Black | 326.4°       | Deep purple (dark) | dark purple |
+
+Together these 10 classes span the full 360° hue circle with a minimum angular gap of
+approximately 17° (Apple 10.3° → Orange 27.4°), which is above the hue-variance spread of
+any individual class (~5–15°), so nearest-neighbour classification in hue space is feasible.
+
+### 0.1.4 Classes considered and rejected
+
+The following candidates were evaluated and excluded:
+
+| Candidate | Reason for exclusion |
+|-----------|----------------------|
+| Strawberry | Mean hue ≈ 4–8° — collides with Apple Red 1 and Tomato (all in the 0–15° red band) |
+| Pomegranate | Mean hue ≈ 2–5° — indistinguishable from Apple Red in mean hue alone |
+| Pear (green) | Mean hue ≈ 65–85° — overlaps with Avocado; saturation lower, harder to mask |
+| Lime | Mean hue ≈ 90–110° — collides with Cucumber 1 in the green zone |
+| Watermelon | Bi-modal hue (red flesh + green rind); classifier receives a blended mean |
+| Mandarin / Clementine | Mean hue ≈ 20–30° — collides with Orange 1; insufficient separation |
+| Grape (dark) | Very low saturation and value; guard mask suppresses most pixels; weak signal |
+
+### 0.1.5 Ramping strategy — 3 → 5 → 10 classes
+
+The 10 classes are ranked in `SPEC_10` (`scripts/run.py`) so that the **first 3** are the
+best-separated starter set and each additional fruit incrementally increases difficulty:
+
+- **3-fruit set (Apple, Orange, Banana):** covers red / orange / yellow — three of the most
+  visually distinct fruit hues. Mean hue gap between each consecutive pair is ~17–16°, and
+  saturation and value also differ significantly. Expected Test-folder accuracy: high.
+- **5-fruit set (+ Avocado, Cucumber):** adds yellow-green and green. Avocado has a lower
+  mean value (darker flesh) which provides an additional discriminating dimension beyond
+  hue. Expected accuracy: moderate to high.
+- **10-fruit set (all above + Cucumber 3, Huckleberry, Raspberry, Cherry Black, Lychee):**
+  completes the wheel. The 10-fruit set deliberately includes some **hard pairs** to stress-
+  test the classifier and generate informative confusion-matrix entries for the presentation:
+  *Lychee* and *Apple Red* are both in the red zone (hue < 15°) and are separated only by
+  value/saturation; *Cucumber 1* and *Cucumber 3* differ primarily in saturation rather than
+  hue. These pairs are expected to produce the highest inter-class confusion and are
+  explicitly analysed in §8.
 
 ---
 
@@ -166,11 +251,12 @@ per-class references measured on the Train folder.
 
 - **Baseline feature (3 fruits):** `(circular mean hue, variance of saturation)` — the
   homogeneity criterion named in the task.
-- **Extended feature (5 / 10 fruits):** `(circular mean H, mean S, circular var H, var S)`.
-  As classes are added, hue alone stops separating them (several fruits share an orange/yellow
-  hue), so the saturation and variance dimensions become essential. The use of colour-region
-  statistics for classification follows the classical colour-region-segmentation line of Ohta,
-  Kanade and Sakai [8].
+- **Extended feature (5 / 10 fruits):** `(circular mean H, mean S, circular var H,
+  var S, mean V, var V)`. As classes are added, hue alone stops separating them
+  (for example, avocado and banana can overlap in yellow-green hue), so
+  saturation, variance, and brightness dimensions become essential. The use of
+  colour-region statistics for classification follows the classical
+  colour-region-segmentation line of Ohta, Kanade and Sakai [8].
 - **Normalisation (extension):** features are z-scored using the Train-set spread so hue and
   saturation-variance are weighted comparably in the distance.
 - **Nearest-neighbour with rejection (extension):** a region is assigned to its nearest class
@@ -195,7 +281,8 @@ RGB image
   → morphological opening then closing ........ (ext) [5]
   → connected-component area filter ........... (ext)
   → CLASSIFY: z-scored (circ mean H, mean S,
-        circ var H, var S), NN + rejection .... (oc)  [3][8]
+        circ var H, var S, mean V, var V),
+        NN + rejection ........................ (oc)  [3][8]
   → colour-overlaid segmentation mask
 ```
 
@@ -207,7 +294,8 @@ RGB image
 
 **Advantages.**
 - Operating on hue gives illumination-tolerant colour separation [1], [8]; the guard mask makes
-  the method robust to the shadowed, cluttered backgrounds of Fruits-262 [10].
+  the method more robust to the shadowed, cluttered backgrounds common in
+  `test-multiple_fruits` and Fruits-262 testing images [10].
 - Split-and-merge adapts resolution to image content — coarse where uniform, fine where
   detailed — at modest memory cost [2].
 - The combination of a variance criterion with a Sobel edge criterion [6], [7] localises
@@ -220,7 +308,8 @@ RGB image
 - **Blocky boundaries.** The regular quadtree split favours axis-aligned, blocky region edges
   [2]; morphology mitigates but does not fully remove this.
 - **Threshold sensitivity.** Fixed `tau_H`, `tau_S`, `tau_E` tuned on Train may not transfer
-  perfectly to Fruits-262; this is a known limitation of block-thresholded split-and-merge.
+  perfectly to `test-multiple_fruits` or Fruits-262 scene images; this is a known limitation
+  of block-thresholded split-and-merge.
 - **Achromatic regions.** Where luminance/saturation are low the guard mask excludes pixels,
   so very dark or desaturated fruits (or occluded ones) may be under-segmented — an acceptable,
   explainable failure rather than a wrong label.

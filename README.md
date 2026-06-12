@@ -76,15 +76,17 @@ python scripts/run.py --train data/Fruits-360/Training \
                       --test  data/Fruits-360/Test \
                       --evaluate --nfruits 3
 
-# proof-of-concept overlay on a multi-fruit / Fruits-262 image
+# testing overlay on a selected test-multiple_fruits / Fruits-262 image
 python scripts/run.py --train data/Fruits-360/Training \
-                      --image data/fruits-262/scene.jpg \
+                      --image data/Fruits-360/test-multiple_fruits/scene.jpg \
                       --out results/overlay.png --nfruits 3
 ```
 
 For the bonus, repeat with `--nfruits 5` and `--nfruits 10`. Edit the class
-folder names in `scripts/run.py` (`SPEC_10`) to match your Fruits-360 copy, and
-tune `SegmentationConfig` **on the Train set only**.
+folder names in `scripts/run.py` (`SPEC_10`) to match your Fruits-360 copy. Use
+Fruits-360 Test for validation, then use suitable `test-multiple_fruits` and
+Fruits-262 images as realistic testing scenes. Tune `SegmentationConfig` **on
+the Train set only**.
 
 ## Data flow (one image)
 
@@ -98,4 +100,4 @@ bgr ─► median+Gaussian ─► HSV + guard mask ─► Sobel edges
 
 This is a reference implementation to **study and defend**. Be able to explain
 every `(oc)` step — especially `split_merge.py` and the circular statistics in
-`color_space.py`. Keep the AI-usage declaration on your closing slide.
+`color_space.py`. 

@@ -49,13 +49,16 @@ def _image_feature(bgr, extended=True, s_min=0.20):
         return None
     hv = h[fg]
     sv = s[fg]
+    vv = v[fg]
     mh = circular_mean(hv)
     cvh = circular_variance(hv)
     ms = float(sv.mean())
     vs = float(sv.var())
+    mv = float(vv.mean())
+    vv_var = float(vv.var())
     ch, sh = np.cos(mh), np.sin(mh)
     if extended:
-        return np.array([ch, sh, ms, cvh, vs], dtype=np.float64)
+        return np.array([ch, sh, ms, cvh, vs, mv, vv_var], dtype=np.float64)
     return np.array([ch, sh, vs], dtype=np.float64)
 
 
@@ -65,7 +68,7 @@ def build_references(train_dir, class_spec, extended=True, max_per_class=200):
 
     @param train_dir  path to Fruits-360 'Training' folder.
     @param class_spec list of (folder_name, display_name, overlay_bgr) tuples.
-    @param extended   use the 4-descriptor feature form.
+    @param extended   use the richer 5/10-fruit feature form.
     @param max_per_class cap on images sampled per class (speed).
     @return (references, norm_mean, norm_std) where references is a list of
             ClassReference and norm_* are the global z-score parameters.
@@ -107,9 +110,9 @@ def build_references(train_dir, class_spec, extended=True, max_per_class=200):
 # noisy dimension (e.g. variance of saturation) from dominating the distance
 # once it is z-scored by a tiny standard deviation.
 #   baseline order : [cos_h, sin_h, var_s]
-#   extended order : [cos_h, sin_h, mean_s, circ_var_h, var_s]
+#   extended order : [cos_h, sin_h, mean_s, circ_var_h, var_s, mean_v, var_v]
 _WEIGHTS_BASELINE = np.array([1.0, 1.0, 0.4])
-_WEIGHTS_EXTENDED = np.array([1.0, 1.0, 0.7, 0.4, 0.4])
+_WEIGHTS_EXTENDED = np.array([1.2, 1.2, 0.7, 0.4, 0.4, 0.9, 0.0])
 
 
 def classify_regions(region_stats, references, norm_mean, norm_std,

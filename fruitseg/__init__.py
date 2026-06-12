@@ -32,7 +32,7 @@ from .split_merge import split_quadtree, merge_regions
 from .postprocess import morphological_cleanup, area_filter
 from .features import region_features, RegionStats
 from .classify import ClassReference, build_references, classify_regions
-from .pipeline import segment_image, SegmentationConfig
+from .pipeline import segment_image, add_legend, side_by_side, SegmentationConfig
 from .evaluation import (evaluate_classification, metrics_from_confusion,
                          print_report)
 
@@ -46,6 +46,6 @@ __all__ = [
     "morphological_cleanup", "area_filter",
     "region_features", "RegionStats",
     "ClassReference", "build_references", "classify_regions",
-    "segment_image", "SegmentationConfig",
+    "segment_image", "add_legend", "side_by_side", "SegmentationConfig",
     "evaluate_classification", "metrics_from_confusion", "print_report",
 ]
