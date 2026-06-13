@@ -795,7 +795,7 @@ def run_3class_scene_demo(refs3, nmean3, nstd3):
     print("═"*70)
 
     scene_files = [
-        ("cherry_1.jpg",        "Cherry scene"),
+        ("cherry(wax)_3.jpg",        "Cherry scene"),
         ("orange_5.jpg",        "Orange scene"),
         ("banana_orange.jpg",   "Banana + Orange scene"),
     ]
@@ -825,7 +825,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     sp3 = _spec3(SPEC_10)
 
     demos = [
-        (os.path.join(MULTI, "cherry_14.jpg"),
+        (os.path.join(MULTI, "cherry_16.jpg"),
          10, SPEC_10, refs10, nmean10, nstd10,
          "cherry_scene_overlay.png", "Cherry scene  (10-class)"),
         (os.path.join(MULTI, "banana_1.jpg"),
@@ -1004,7 +1004,7 @@ def run_fruits262_3class_proof():
     # Best images identified from scan
     candidates = [
         ("cherry", "0.jpg",  0, "Cherry"),
-        ("orange", "1.jpg",  1, "Orange"),
+        ("orange", "5.jpg",  1, "Orange"),
         ("banana", "3.jpg",  2, "Banana"),
     ]
 
