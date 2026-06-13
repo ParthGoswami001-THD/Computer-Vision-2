@@ -1,0 +1,622 @@
+"=== CONFUSION MATRIX (rows=true, cols=predicted) ==="
+,Cherry,Orange,Banana,Avocado,Cucumber,Cherry Black,Cucumber 3,Huckleberry,Raspberry,Lychee,background
+Cherry,60,0,0,0,0,0,0,0,0,0,0
+Orange,0,60,0,0,0,0,0,0,0,0,0
+Banana,0,0,60,0,0,0,0,0,0,0,0
+Avocado,0,0,0,59,1,0,0,0,0,0,0
+Cucumber,0,0,0,0,50,0,0,0,0,0,0
+Cherry Black,0,0,0,0,0,60,0,0,0,0,0
+Cucumber 3,0,0,0,0,2,0,57,1,0,0,0
+Huckleberry,0,0,0,0,0,0,0,60,0,0,0
+Raspberry,0,0,0,0,0,0,0,0,60,0,0
+Lychee,0,0,0,0,0,0,0,0,0,60,0
+
+=== PER-CLASS METRICS ===
+class,n_train,precision,recall,f1,support
+Cherry,200,1.0000,1.0000,1.0000,60
+Orange,200,1.0000,1.0000,1.0000,60
+Banana,200,1.0000,1.0000,1.0000,60
+Avocado,200,1.0000,0.9833,0.9916,60
+Cucumber,150,0.9434,1.0000,0.9709,50
+Cherry Black,200,1.0000,1.0000,1.0000,60
+Cucumber 3,200,1.0000,0.9500,0.9744,60
+Huckleberry,200,0.9836,1.0000,0.9917,60
+Raspberry,200,1.0000,1.0000,1.0000,60
+Lychee,200,1.0000,1.0000,1.0000,60
+overall_accuracy,,0.9932,,,
+
+=== CORRECT CLASSIFICATIONS ===
+file,true_class
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/321_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/322_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/323_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/324_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/325_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/326_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/327_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/32_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/33_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/34_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/35_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/36_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/37_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/38_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/39_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/3_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/40_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/41_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/42_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/43_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/44_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/45_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/46_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/47_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/48_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/49_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/4_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/50_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/51_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/52_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/53_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/54_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/55_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/56_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/57_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/58_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/59_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/5_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/60_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/61_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/62_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/63_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/64_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/65_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/66_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/67_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/68_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/69_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/6_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/70_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/71_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/72_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/73_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/74_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/75_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/76_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/77_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/78_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/79_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry 1/7_100.jpg,Cherry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/30_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/310_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/31_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/32_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/33_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/34_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/35_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/36_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/37_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/38_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/39_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/3_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/40_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/41_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/42_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/43_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/44_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/45_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/46_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/47_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/48_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/49_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/4_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/50_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/51_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/52_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/53_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/54_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/55_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/56_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/57_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/58_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/59_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/5_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/60_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/61_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/62_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/63_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/64_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/65_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/66_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/67_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/68_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/69_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/6_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/70_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/71_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/72_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/73_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/74_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/75_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/76_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/77_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/78_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/79_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/7_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/80_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/81_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/82_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Orange 1/83_100.jpg,Orange
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/100_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/101_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/102_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/103_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/105_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/106_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/108_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/109_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/110_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/111_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/113_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/114_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/115_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/116_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/12_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/13_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/14_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/158_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/159_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/15_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/160_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/161_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/162_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/163_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/164_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/165_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/166_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/167_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/168_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/169_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/16_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/17_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/18_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/19_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/20_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/21_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/22_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/23_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/24_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/25_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/26_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/27_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/28_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/294_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/295_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/296_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/297_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/298_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/299_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/29_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/300_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/301_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/302_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/303_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/304_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/305_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/306_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/307_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/308_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Banana 1/309_100.jpg,Banana
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/45_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/46_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/47_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/48_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/49_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/4_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/50_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/51_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/52_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/53_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/54_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/55_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/56_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/57_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/58_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/59_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/5_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/60_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/61_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/62_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/63_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/64_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/65_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/66_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/67_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/68_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/69_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/6_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/70_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/71_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/72_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/73_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/74_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/75_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/76_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/77_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/78_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/79_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/7_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/80_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/81_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/82_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/83_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/84_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/85_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/86_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/87_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/88_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/89_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/8_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/90_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/91_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/92_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/93_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/94_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/95_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/96_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/98_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/99_100.jpg,Avocado
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_103_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_107_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_111_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_115_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_119_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_11_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_123_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_127_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_131_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_135_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_139_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_143_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_147_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_151_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_155_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_159_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_15_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_163_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_167_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_171_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_175_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_179_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_183_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_187_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_191_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_195_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_199_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_19_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_23_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_27_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_31_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_35_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_39_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_3_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_43_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_47_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_51_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_55_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_59_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_63_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_67_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_71_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_75_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_79_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_7_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_83_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_87_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_91_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_95_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 1/r0_99_100.jpg,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/164_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/166_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/167_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/168_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/169_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/170_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/171_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/172_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/173_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/174_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/175_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/176_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/177_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/178_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/179_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/181_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/182_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/183_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/184_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/185_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/186_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/187_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/188_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/189_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/192_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/194_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/195_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/196_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/197_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/198_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/199_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/200_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/201_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/202_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/203_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/204_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/205_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/206_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/207_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/208_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/211_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/212_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/213_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/214_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/215_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/216_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/217_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/218_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/219_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/220_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/221_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/222_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/223_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/224_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/225_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/226_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/227_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/228_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/229_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cherry Wax Black 1/231_100.jpg,Cherry Black
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_107_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_111_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_115_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_119_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_11_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_123_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_127_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_131_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_135_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_139_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_143_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_147_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_151_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_155_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_159_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_15_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_163_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_167_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_171_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_175_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_179_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_183_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_187_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_191_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_195_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_199_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_19_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_203_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_207_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_211_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_215_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_219_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_223_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_227_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_231_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_235_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_239_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_23_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_243_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_247_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_251_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_255_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_259_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_271_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_275_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_279_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_27_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_283_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_287_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_291_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_295_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_299_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_303_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_307_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_311_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_315_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_31_100.jpg,Cucumber 3
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/0_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/100_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/101_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/102_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/103_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/10_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/111_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/120_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/121_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/122_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/145_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/146_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/151_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/153_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/155_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/156_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/157_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/159_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/162_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/163_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/173_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/174_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/175_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/187_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/189_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/193_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/1_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/222_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/223_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/227_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/228_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/230_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/231_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/232_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/233_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/234_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/235_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/238_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/239_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/241_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/246_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/251_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/253_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/257_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/268_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/275_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/276_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/277_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/278_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/281_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/282_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/283_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/284_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/285_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/292_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/293_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/294_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/295_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/296_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Huckleberry 1/297_100.jpg,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/100_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/101_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/102_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/103_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/104_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/105_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/106_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/107_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/108_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/109_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/110_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/111_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/112_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/199_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/200_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/202_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/203_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/204_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/205_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/206_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/207_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/208_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/209_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/210_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/211_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/212_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/213_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/214_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/215_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/216_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/217_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/218_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/219_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/220_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/221_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/222_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/223_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/224_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/225_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/226_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/227_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/228_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/229_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/230_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/231_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/232_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/233_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/234_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/235_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/236_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/237_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/238_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/239_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/240_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/241_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/242_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/243_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/244_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/245_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Raspberry 1/246_100.jpg,Raspberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/11_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/12_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/13_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/15_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/1_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/22_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/24_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/25_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/289_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/293_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/2_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/305_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/306_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/307_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/308_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/311_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/312_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/313_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/314_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/315_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/316_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/317_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/318_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/31_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/325_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/327_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/34_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/38_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/39_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/3_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/42_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/43_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/46_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/47_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/48_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/49_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/4_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/51_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/52_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/53_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/54_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/55_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/56_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/57_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/58_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/59_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/60_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/61_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/62_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/63_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/66_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/69_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/6_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/70_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/71_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/72_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/73_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/74_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/75_100.jpg,Lychee
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Lychee 1/76_100.jpg,Lychee
+
+=== WRONG / REJECTED CLASSIFICATIONS ===
+file,true_class,predicted_class
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Avocado 1/97_100.jpg,Avocado,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_103_100.jpg,Cucumber 3,Huckleberry
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_263_100.jpg,Cucumber 3,Cucumber
+/home/divine/Documents/Computer-Vision-2/data/Fruits-360/fruits-360_100x100/fruits-360/Test/Cucumber 3/r0_267_100.jpg,Cucumber 3,Cucumber

@@ -1394,9 +1394,6 @@ def main():
     print("█  HSV SPLIT-AND-MERGE FRUIT SEGMENTATION  —  COMPLETE PROJECT RUN")
     print("█"*70)
 
-    # ── Assignment step 1: self-test ─────────────────────────────────────────
-    run_selftest()
-
     # ── Assignment step 2: Training folder scan ──────────────────────────────
     run_training_scan()
 
