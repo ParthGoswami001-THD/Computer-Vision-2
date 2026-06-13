@@ -49,10 +49,20 @@ python scripts/selftest.py
 
 ## 1. Validate on the Fruits-360 Test folder (confusion matrix)
 
-```
-python scripts/run.py --train /path/to/Fruits-360/Training \
-              --test  /path/to/Fruits-360/Test \
+The Fruits-360 download unpacks to a nested directory. Both shorthand and full
+paths work — the script auto-resolves Training/Test inside the given root:
+
+```bash
+# shorthand — script finds fruits-360_100x100/fruits-360/Training automatically
+python scripts/run.py --train data/Fruits-360 \
+              --test  data/Fruits-360 \
               --evaluate --nfruits 3
+
+# explicit path (if the above does not resolve correctly)
+python scripts/run.py \
+    --train data/Fruits-360/fruits-360_100x100/fruits-360/Training \
+    --test  data/Fruits-360/fruits-360_100x100/fruits-360/Test \
+    --evaluate --nfruits 3
 ```
 
 Prints the confusion matrix and the per-class precision/recall/F1 table, and
@@ -61,10 +71,10 @@ counts correct vs. wrong files. For the bonus, repeat with `--nfruits 5` and
 
 ## 2. Proof-of-concept on a multi-fruit / Fruits-262 image
 
-```
-python scripts/run.py --train /path/to/Fruits-360/Training \
-              --image /path/to/scene.jpg \
-              --out overlay.png --nfruits 3
+```bash
+python scripts/run.py --train data/Fruits-360 \
+              --image "data/Fruits-360/fruits-360_multi/test-multiple_fruits/cherry_in_the_basket.jpg" \
+              --out results/overlay.png --nfruits 3
 ```
 
 Writes `overlay.png` with each detected fruit class tinted in its colour

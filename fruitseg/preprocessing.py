@@ -1,30 +1,26 @@
 """!
 @file preprocessing.py
-@brief Preprocessing extensions: own-code median filtering (oc), own-code separable
-       Gaussian low-pass (oc), and own-code Sobel-Feldman edge operator (oc).
+@brief Median filter, separable Gaussian low-pass, and Sobel edge detection
+       -- all implemented from scratch using only NumPy array operations.
 
-Median filter:  Tukey, "Exploratory Data Analysis", 1977.  Robust to salt-and-
-                pepper speckle, preserves edges -> prevents over-splitting.
-Gaussian blur:  Marr & Hildreth, "Theory of edge detection", Proc. R. Soc. 1980.
-                Separable implementation: G2D(x,y) = G(x) * G(y).
-Sobel operator: Sobel & Feldman, SAIL 1968.  Used here to drive the edge-based
-                split criterion (Pavlidis & Liow, IEEE TPAMI 1990).
+The median pass removes salt-and-pepper noise without blurring edges, so the
+variance-based split criterion does not over-fire on noise. The Gaussian pass
+gently smooths fine surface texture. Sobel edges on the Value channel drive
+the edge component of the split criterion.
 """
 
 import numpy as np
 
 
-# --- 1-D Gaussian helpers (own code) ------------------------------------------
-
 def _gaussian_kernel_1d(sigma, radius):
-    """Build a normalised 1-D Gaussian kernel of half-width `radius` (own code)."""
+    """Build a normalised 1-D Gaussian kernel of half-width radius."""
     x = np.arange(-radius, radius + 1, dtype=np.float32)
     k = np.exp(-x * x / (2.0 * sigma * sigma))
     return k / k.sum()
 
 
 def _convolve1d_h(channel, kernel):
-    """Own-code 1-D convolution along image rows using shifted-array summation."""
+    """1-D convolution along rows using shifted-array summation (own code)."""
     pad = len(kernel) // 2
     padded = np.pad(channel, ((0, 0), (pad, pad)), mode='reflect')
     H, W = channel.shape
@@ -36,7 +32,7 @@ def _convolve1d_h(channel, kernel):
 
 
 def _convolve1d_v(channel, kernel):
-    """Own-code 1-D convolution along image columns using shifted-array summation."""
+    """1-D convolution along columns using shifted-array summation (own code)."""
     pad = len(kernel) // 2
     padded = np.pad(channel, ((pad, pad), (0, 0)), mode='reflect')
     H, W = channel.shape
@@ -49,11 +45,11 @@ def _convolve1d_v(channel, kernel):
 
 def median_filter(bgr, ksize=5):
     """!
-    Own-code median filter using numpy sliding-window extraction (oc).
+    Per-channel median filter using NumPy stride-trick window extraction (own code).
 
-    For each pixel a ksize×ksize neighbourhood is extracted via stride tricks,
-    flattened and sorted; the middle element is the median.  Applied per channel.
-    No library median or convolution is called.
+    For each pixel a ksize x ksize neighbourhood is extracted via as_strided,
+    flattened, sorted, and the middle element taken as the median. No library
+    median or convolution is called.
 
     @param bgr   uint8 BGR image.
     @param ksize odd kernel size.
@@ -76,11 +72,10 @@ def median_filter(bgr, ksize=5):
 
 def gaussian_lowpass(bgr, sigma=1.5):
     """!
-    Own-code separable Gaussian low-pass filter (oc).
+    Separable Gaussian low-pass filter (own code).
 
-    A 1-D Gaussian kernel G(x) is convolved first along rows then along columns,
-    exploiting Gaussian separability: G2D(x,y) = G(x) * G(y).  No library blur
-    is called.
+    Exploits the separability G2D(x, y) = G(x) * G(y): a 1-D kernel is
+    convolved first along rows, then along columns. No library blur is called.
 
     @param bgr   uint8 BGR image.
     @param sigma standard deviation in pixels.
@@ -99,25 +94,25 @@ def gaussian_lowpass(bgr, sigma=1.5):
     return np.clip(np.stack(out_channels, axis=2), 0, 255).astype(np.uint8)
 
 
-# --- Sobel-Feldman 3×3 kernels (own code convolution) -------------------------
 _KX = np.array([[-1, 0, 1],
                 [-2, 0, 2],
                 [-1, 0, 1]], dtype=np.float32)
 _KY = np.array([[-1, -2, -1],
-                [0,  0,  0],
-                [1,  2,  1]], dtype=np.float32)
+                [ 0,  0,  0],
+                [ 1,  2,  1]], dtype=np.float32)
 
 
 def _convolve3x3(img, kernel):
     """!
-    Own-code 3×3 convolution using shifted-array summation (basic numpy only).
+    3x3 convolution via shifted-array summation (own code).
 
-    The image is edge-padded by one pixel; for each of the 9 kernel taps the
-    correspondingly shifted view is accumulated.  No library convolution is used.
+    The image is edge-padded by one pixel; for each of the nine kernel taps
+    the corresponding shifted view is accumulated. No library convolution is
+    called.
 
     @param img    float32 2-D array.
-    @param kernel 3×3 float32 array.
-    @return float32 array, same shape as img.
+    @param kernel 3x3 float32 kernel.
+    @return float32 result array, same shape as img.
     """
     padded = np.pad(img, 1, mode="edge")
     out = np.zeros_like(img, dtype=np.float32)
@@ -132,13 +127,14 @@ def _convolve3x3(img, kernel):
 
 def sobel_edges(v):
     """!
-    Own-code Sobel-Feldman gradient magnitude on the Value channel (oc).
+    Sobel-Feldman gradient magnitude on the Value channel (own code).
 
-    Value is used rather than hue because the gradient is stable there even in
-    weakly-coloured regions.  The magnitude is normalised to [0, 1].
+    Value is used rather than hue because its gradient is stable even in
+    weakly coloured or achromatic regions. The magnitude is normalised to
+    [0, 1].
 
     @param v  value channel in [0, 1].
-    @return edge-magnitude map in [0, 1], same shape.
+    @return edge-magnitude map in [0, 1], same shape as v.
     """
     gx = _convolve3x3(v, _KX)
     gy = _convolve3x3(v, _KY)

@@ -1,11 +1,11 @@
 """!
 @file evaluation.py
-@brief Evaluation utilities: confusion matrix and per-class accuracy/recall/F1,
-       with filename logging as required by the assignment.
+@brief Evaluation utilities: confusion matrix, per-class metrics, and
+       filename logging as required by the assignment.
 
-Single-fruit validation on the Fruits-360 Test folder: each Test image contains
-one fruit on a (near) white background, so the predicted class is the dominant
-non-background region produced by the pipeline.
+Single-fruit validation on the Fruits-360 Test folder: each Test image
+contains one fruit on a near-white background, so the predicted class is
+taken as the dominant non-background region produced by the pipeline.
 """
 
 import os
@@ -17,7 +17,7 @@ from .pipeline import segment_image, SegmentationConfig
 
 
 def _dominant_class(class_map, n_classes):
-    """!Return the most frequent non-background class in a class map (-1 if none)."""
+    """Return the most frequent non-background class in a class map (-1 if none)."""
     if (class_map >= 0).any():
         counts = np.bincount(class_map[class_map >= 0].ravel(), minlength=n_classes)
     else:
@@ -32,12 +32,13 @@ def evaluate_classification(test_dir, class_spec, references, norm_mean, norm_st
     """!
     Validate on single-fruit Test images and build a confusion matrix.
 
-    @param test_dir   Fruits-360 'Test' folder.
-    @param class_spec list of (folder, name, color).
-    @param references,norm_mean,norm_std  classifier parameters.
-    @param cfg        SegmentationConfig.
-    @param max_per_class images sampled per class.
-    @return dict: confusion (n x (n+1)), labels, metrics, and filename logs.
+    @param test_dir     Fruits-360 Test folder path.
+    @param class_spec   list of (folder, name, color) tuples.
+    @param references, norm_mean, norm_std  classifier parameters.
+    @param cfg          SegmentationConfig; defaults used if None.
+    @param max_per_class maximum images sampled per class.
+    @return dict with keys: confusion (n x n+1 int array), labels, pred_labels,
+            metrics, correct_files, wrong_files.
     """
     cfg = cfg or SegmentationConfig()
     names = [r.name for r in references]
@@ -103,13 +104,13 @@ def metrics_from_confusion(confusion, names):
 
 
 def print_report(result, show_files=True):
-    """!Pretty-print the confusion matrix, metrics, and per-file results.
+    """!
+    Pretty-print the confusion matrix, per-class metrics, and file-level results.
 
     @param result      dict returned by evaluate_classification.
-    @param show_files  if True, list every wrongly-classified file and
-                       summarise correctly-classified ones by class
-                       (satisfies the assignment's "file names and results"
-                       documentation requirement).
+    @param show_files  if True, list wrongly-classified files and summarise
+                       correctly-classified ones by class -- satisfies the
+                       assignment's filename logging requirement.
     """
     names = result["labels"]
     pred_names = result.get("pred_labels", names)
@@ -134,7 +135,6 @@ def print_report(result, show_files=True):
     if not show_files:
         return
 
-    # --- correctly-classified files grouped by class --------------------------
     if correct:
         print("\n--- CORRECT classifications ---")
         by_class = {}
@@ -145,7 +145,6 @@ def print_report(result, show_files=True):
             for p in paths:
                 print(f"    {p}")
 
-    # --- wrongly-classified / rejected files ----------------------------------
     if wrong:
         print("\n--- WRONG / REJECTED classifications ---")
         for entry in wrong:

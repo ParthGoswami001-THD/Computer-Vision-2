@@ -1,10 +1,13 @@
 """!
 @file scripts/selftest.py
-@brief Synthetic end-to-end test (no real dataset needed).
+@brief Synthetic end-to-end test -- no real dataset required.
 
-Builds tiny synthetic Train/Test folders of solid-colour fruit blobs and a
-multi-fruit scene, then runs the full pipeline + evaluation to verify every
-module executes and data flows correctly.  Run:  python scripts/selftest.py
+Builds tiny synthetic Training/Test folders of solid-colour fruit blobs and a
+multi-fruit scene, then runs the full pipeline and evaluation to verify that
+every module executes correctly and data flows through without error.
+
+Run from the project root:
+    python scripts/selftest.py
 """
 
 import os
@@ -18,7 +21,7 @@ if _PROJECT_ROOT not in sys.path:
 import numpy as np
 import cv2
 from fruitseg import (build_references, segment_image, SegmentationConfig,
-                    evaluate_classification, print_report)
+                      evaluate_classification, print_report)
 
 
 def _solid_fruit(color_bgr, size=100, radius=38, jitter=10):
@@ -82,7 +85,7 @@ def main():
                                          specs, refs, nmean, nstd, cfg, max_per_class=6)
         print_report(result)
 
-    print("\nSELF-TEST COMPLETE — all modules executed.")
+    print("\nSELF-TEST COMPLETE -- all modules executed.")
 
 
 if __name__ == "__main__":

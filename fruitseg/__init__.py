@@ -1,28 +1,15 @@
 """!
 @package fruitseg
-HSV split-and-merge fruit segmentation (Computer Vision Assignment 2).
+HSV split-and-merge fruit segmentation -- Computer Vision Assignment 2.
 
-Pipeline (see docs/ALGORITHM.md for the scientific reasoning and IEEE references):
+Pipeline overview (see docs/ALGORITHM.md for references):
+    RGB -> HSV -> guard mask -> preprocessing -> SPLIT (quadtree, >= 16 regions)
+    -> MERGE (Region Adjacency Graph, edge-aware) -> morphological cleanup
+    -> feature extraction -> nearest-neighbour classification
 
-    RGB --(wl)--> HSV --> luminance/saturation guard mask
-        --> preprocessing (median + Gaussian, Sobel edge map)
-        --(oc)--> SPLIT (quadtree, >=16 start regions)
-        --(oc)--> MERGE (Region Adjacency Graph, edge-aware)
-        --(wl)--> morphological opening/closing + area filter
-        --(oc)--> feature extraction + nearest-neighbour classification
-
-Tags:  (wl) = library allowed (numpy/scipy/opencv)
-       (oc) = own code  (only basic numpy matrix operations)
-
-Module map:
-    color_space    RGB->HSV (wl), guard mask + circular hue statistics (oc)
-    preprocessing  median + Gaussian (wl), Sobel edges (oc)
-    split_merge    quadtree split + RAG merge (oc)  <- core of the assignment
-    postprocess    morphological cleanup + area filter (wl)
-    features       per-region feature vectors (oc)
-    classify       Train references + nearest-neighbour classifier (oc)
-    pipeline       orchestration + SegmentationConfig (all parameters)
-    evaluation     confusion matrix + accuracy/recall/F1
+Tags used in source files:
+    (wl) = library allowed (numpy / opencv)
+    (oc) = own code (basic numpy array operations only)
 """
 
 from .color_space import (to_hsv_float, guard_mask,

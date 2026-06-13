@@ -83,14 +83,12 @@ PLT_STYLE = {
 }
 
 
-def _spec3(spec): return [(f, n, tuple(int(c) for c in col)) for f,n,col,_ in spec]
+def _drop_hex(spec): return [(f, n, tuple(int(c) for c in col)) for f,n,col,_ in spec]
 
 
 # ── config helpers ────────────────────────────────────────────────────────────
 
 def make_eval_cfg(nfruits):
-    # Use the richer 7-D feature vector even for the 3-class run.  Cherry and
-    # Orange are too close in hue for the baseline [cos_h, sin_h, var_s] form.
     return SegmentationConfig(extended_features=True, max_side=320)
 
 
@@ -436,7 +434,7 @@ def run_evaluation():
     for spec, tag in [(SPEC_3, "3fruit"), (SPEC_5, "5fruit"), (SPEC_10, "10fruit")]:
         n = len(spec)
         print(f"\n  ── {n}-class evaluation ──")
-        sp3 = _spec3(spec)
+        sp3 = _drop_hex(spec)
         refs, nmean, nstd = build_references(TRAIN, sp3, extended=True)
         cfg = make_eval_cfg(n)
         t0 = time.time()
@@ -609,7 +607,7 @@ def draw_region_count_chart(n_split_main, n_merged_main):
     splits_all, merges_all, img_labels = [], [], []
 
     # Use the 3-fruit refs for speed
-    sp3 = _spec3(SPEC_3)
+    sp3 = _drop_hex(SPEC_3)
     refs3, nmean3, nstd3 = build_references(TRAIN, sp3, extended=True)
 
     for fname, label in test_images:
@@ -827,7 +825,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     print("═"*70)
 
     cfg = make_scene_cfg(10)
-    sp3 = _spec3(SPEC_10)
+    sp3 = _drop_hex(SPEC_10)
 
     demos = [
         (os.path.join(MULTI, "cherry_17.jpg"),
@@ -855,9 +853,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
         print(f"  {desc}: {classes_detected}")
         print(f"  Saved → results/{out_name}")
 
-    # ── Composite 10-class scene: one Test image per class stitched together ──
-    # Guarantees all trained classes appear — no dependency on external scene imgs
-    print(f"\n  Building composite 10-class scene from Test images …")
+    print(f"\n  Building composite 10-class scene from Test images ...")
     tile_size = 200
     tiles = []
     for folder, name, col, _ in SPEC_10:
@@ -992,7 +988,7 @@ def run_fruits262_3class_proof():
 
     # 3-class spec — same ordering as SPEC_3 so refs index matches
     # Use 5-class normalization context for consistency with assignment spec
-    spec5 = _spec3(SPEC_5)
+    spec5 = _drop_hex(SPEC_5)
     refs_full, nm3, ns3 = build_references(TRAIN, spec5, extended=True)
     refs3 = refs_full[:3]  # Take only first 3 classes
 
@@ -1000,9 +996,21 @@ def run_fruits262_3class_proof():
     cfg.max_side = 480
     cfg.s_min = 0.12; cfg.v_min = 0.12
     cfg.hue_thresh = 0.20; cfg.sat_thresh = 0.08
-    cfg.refine_hue_tol = 0.40
-    cfg.expand_hue_tol = 0.28
-    cfg.min_class_fraction = 0.0
+    # Orange-Banana hue gap is ~0.33 rad.  Tolerances must stay strictly below
+    # that so the two classes never share hue-compatible pixels after
+    # refinement / expansion.
+    cfg.refine_hue_tol = 0.22
+    cfg.expand_hue_tol = 0.20
+    # Suppress any class that covers less than 12 % of all labelled pixels.
+    # In a single-fruit image one class dominates (~80 %+); false-positive
+    # patches of a different class are always <12 % and get zeroed out.
+    # In the three-fruit composite each class covers ~25-35 %, so all three
+    # survive the threshold.
+    cfg.min_class_fraction = 0.12
+    # Amplify hue dimensions so orange (27 deg) stays firmly separated from
+    # banana (46 deg) even when natural-light photos shift the measured hue
+    # toward the golden-yellow range.
+    cfg.feature_weights = (2.5, 2.5, 0.7, 0.4, 0.4, 0.9, 0.0)
 
     candidates = [
         ("cherry", "1.jpg", 0, "Cherry"),
@@ -1364,12 +1372,11 @@ def main():
 
     # ── Build references (10-class, reused for most steps) ───────────────────
     print("\n  Building 10-class references …")
-    sp10 = _spec3(SPEC_10)
+    sp10 = _drop_hex(SPEC_10)
     refs10, nmean10, nstd10 = build_references(TRAIN, sp10, extended=True)
     print("  " + ", ".join(f"{r.name}({r.n_images})" for r in refs10))
 
-    # Also build 3-class refs for steps 9 / 11
-    sp3_refs = _spec3(SPEC_3)
+    sp3_refs = _drop_hex(SPEC_3)
     refs3, nmean3, nstd3 = build_references(TRAIN, sp3_refs, extended=True)
 
     # ── Pipeline visualisation (step 5 doc support) ───────────────────────────

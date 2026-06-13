@@ -1,28 +1,19 @@
 """!
 @file postprocess.py
-@brief Own-code binary morphological opening/closing (oc) and own-code
-       8-connectivity BFS connected-component area filter (oc) applied to
-       per-class masks to produce clean, solid segmentation regions.
+@brief Binary morphological opening/closing and 8-connectivity BFS
+       connected-component area filtering (own code).
 
-Opening removes small specks; closing fills small holes / bridges gaps.
-Morphology origin: Serra, "Image Analysis and Mathematical Morphology",
-                   Academic Press, 1982 (rooted in Matheron, 1975).
-Connected components: standard 8-connectivity BFS flood-fill (own code).
+Opening removes small spurious blobs; closing fills small interior holes and
+bridges narrow gaps inside a fruit region. Both use a disk structuring element
+built via NumPy stride tricks -- no cv2 morphology calls are made.
 """
 
 import numpy as np
 from collections import deque
 
 
-# --- disk structuring element and binary morphology ---------------------------
-
 def _make_disk(radius):
-    """
-    Return a flat boolean index selecting disk-shaped pixels from a k×k patch.
-
-    Each k×k neighbourhood is flattened; this mask picks out only the entries
-    that fall within the disk of the given radius.
-    """
+    """Return a flat boolean mask selecting disk-shaped pixels from a k x k patch."""
     k = 2 * radius + 1
     yi, xi = np.ogrid[-radius:radius + 1, -radius:radius + 1]
     return (xi * xi + yi * yi <= radius * radius).ravel()
@@ -30,11 +21,11 @@ def _make_disk(radius):
 
 def _binary_dilate(mask, radius):
     """!
-    Own-code binary dilation with a disk structuring element (oc).
+    Binary dilation with a disk structuring element (own code).
 
-    Uses numpy stride tricks to extract every k×k neighbourhood at once, then
-    checks whether any disk-shaped pixel in the neighbourhood is foreground.
-    No library morphology is called.
+    Extracts every k x k neighbourhood via stride tricks, then checks whether
+    any disk-shaped pixel in the neighbourhood is foreground. No cv2 morphology
+    is called.
 
     @param mask   uint8 binary mask.
     @param radius disk radius in pixels.
@@ -54,11 +45,10 @@ def _binary_dilate(mask, radius):
 
 def _binary_erode(mask, radius):
     """!
-    Own-code binary erosion with a disk structuring element (oc).
+    Binary erosion with a disk structuring element (own code).
 
     A pixel stays foreground only if every disk-shaped neighbour is also
-    foreground (standard morphological erosion definition).
-    No library morphology is called.
+    foreground. No cv2 morphology is called.
 
     @param mask   uint8 binary mask.
     @param radius disk radius in pixels.
@@ -78,32 +68,28 @@ def _binary_erode(mask, radius):
 
 def morphological_cleanup(mask, radius=3):
     """!
-    Opening (erode→dilate) then closing (dilate→erode) with a disk SE (oc).
+    Opening (erode then dilate) followed by closing (dilate then erode) (own code).
 
-    Both operations use own-code binary erosion and dilation; no library
-    morphology functions are called.
+    No cv2 morphology functions are called.
 
     @param mask   boolean or uint8 mask for a single class.
     @param radius structuring-element radius in pixels.
     @return cleaned uint8 mask in {0, 1}.
     """
     m = (mask.astype(np.uint8) > 0).astype(np.uint8)
-    m = _binary_dilate(_binary_erode(m, radius), radius)   # open: erode then dilate
-    m = _binary_erode(_binary_dilate(m, radius), radius)   # close: dilate then erode
+    m = _binary_dilate(_binary_erode(m, radius), radius)
+    m = _binary_erode(_binary_dilate(m, radius), radius)
     return m
 
 
-# --- own-code 8-connectivity BFS connected-component labelling ----------------
-
 def _connected_components_8(mask):
     """!
-    Own-code 8-connectivity BFS connected-component labelling (oc).
+    8-connectivity BFS connected-component labelling (own code).
 
-    Each foreground pixel not yet labelled seeds a BFS that visits all
-    8-connected neighbours.  Total work is O(H×W) since every pixel is
-    enqueued at most once.
+    Each foreground pixel seeds a BFS expanding into all 8-connected
+    neighbours. Total work is O(H x W) since every pixel is enqueued once.
 
-    @param mask  binary uint8 array (values 0 or 1).
+    @param mask  binary uint8 array (0 or 1).
     @return (labels int32 array, areas list[int]) where areas[i] is the pixel
             count of the component with label i+1 (label 0 = background).
     """
@@ -139,14 +125,14 @@ def _connected_components_8(mask):
 
 def area_filter(mask, min_area=150):
     """!
-    Drop connected components smaller than `min_area` pixels (oc).
+    Remove connected components smaller than min_area pixels (own code).
 
-    Uses own-code BFS connected-component labelling; no library connectedComponents
+    Uses the BFS connected-component labelling above; no cv2.connectedComponents
     is called.
 
     @param mask     uint8 mask in {0, 1}.
     @param min_area minimum component area to keep.
-    @return uint8 mask in {0, 1} with small components removed.
+    @return uint8 mask with small components zeroed out.
     """
     m = (mask > 0).astype(np.uint8)
     labels, areas = _connected_components_8(m)

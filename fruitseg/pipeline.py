@@ -3,9 +3,9 @@
 @brief End-to-end orchestration of the segmentation pipeline.
 
 segment_image() runs:
-    median + Gaussian  ->  HSV + guard  ->  Sobel edges
-    ->  split (quadtree)  ->  merge (RAG)
-    ->  region features   ->  classify
+    median + Gaussian  ->  HSV + guard mask  ->  Sobel edges
+    ->  quadtree split  ->  RAG merge
+    ->  region features  ->  classify
     ->  per-class morphology + area filter  ->  colour overlay
 """
 
@@ -24,7 +24,7 @@ from .postprocess import morphological_cleanup, area_filter, _connected_componen
 
 @dataclass
 class SegmentationConfig:
-    """!All tunable parameters in one place (tune on the Train set)."""
+    """All tunable parameters in one place. Tune only on the Training set."""
     # preprocessing
     median_ksize: int = 5
     gaussian_sigma: float = 1.5
@@ -37,7 +37,7 @@ class SegmentationConfig:
     tau_s: float = 0.02
     tau_e: float = 0.15
     min_size: int = 4
-    min_start_depth: int = 2          # >=16 starting regions
+    min_start_depth: int = 2
     # merge thresholds
     hue_thresh: float = 0.30
     sat_thresh: float = 0.15
@@ -64,10 +64,9 @@ class SegmentationConfig:
     expand_min_seed_area: int = 5000
     expand_min_seed_frac: float = 0.0
     expand_edge_veto: float = 1.0
-    # suppress classes that cover less than this fraction of all labeled pixels
-    # (0 = no filtering; set to ~0.05 for scene images to kill false positives)
+    # suppress classes covering less than this fraction of all labelled pixels
     min_class_fraction: float = 0.0
-    # speed: longest side the image is resized to before processing (0 = no resize)
+    # longest image side before processing (0 = no resize)
     max_side: int = 320
 
 
@@ -80,7 +79,7 @@ def _maybe_resize(bgr, max_side):
 
 
 def _hsv_edge_map(h, s, v, valid):
-    """Combine value, saturation and circular-hue edges for scene boundaries."""
+    """Combine value, saturation, and circular-hue edges into one edge map."""
     e_v = sobel_edges(v)
     e_s = sobel_edges(s)
     valid_f = valid.astype(np.float32)
@@ -93,10 +92,10 @@ def _hsv_edge_map(h, s, v, valid):
 
 def _fill_components(mask):
     """!
-    Fill holes inside foreground regions by BFS-flooding from image borders (oc).
+    Fill interior holes by BFS-flooding from image borders (own code).
 
-    Any background pixel reachable from the image border is truly external.
-    Background pixels that are NOT reachable are interior holes; they are filled.
+    Background pixels reachable from the image border are truly external.
+    Unreachable background pixels are interior holes and are filled in.
     No library contour or flood-fill function is called.
     """
     m = (mask > 0).astype(np.uint8)
@@ -124,12 +123,13 @@ def _fill_components(mask):
 
 
 def add_legend(bgr, references, title="Legend"):
-    """!Append a white legend panel with class colours and names.
+    """!
+    Append a white legend panel with class colours and names.
 
     @param bgr        uint8 BGR overlay image.
     @param references list[ClassReference] with name and colour.
-    @param title      legend title.
-    @return uint8 BGR image with the legend panel appended on the right.
+    @param title      legend panel title.
+    @return uint8 BGR image with legend appended on the right.
     """
     if not references:
         return bgr
@@ -143,10 +143,8 @@ def add_legend(bgr, references, title="Legend"):
     row_h = 26
     title_h = 30
 
-    text_widths = [
-        cv2.getTextSize(r.name, font, scale, thickness)[0][0]
-        for r in references
-    ]
+    text_widths = [cv2.getTextSize(r.name, font, scale, thickness)[0][0]
+                   for r in references]
     title_w = cv2.getTextSize(title, font, scale, thickness)[0][0]
     panel_w = max(180, pad * 3 + swatch + max([title_w] + text_widths))
     needed_h = pad + title_h + row_h * len(references) + pad
@@ -166,10 +164,8 @@ def add_legend(bgr, references, title="Legend"):
         x_s = x0 + pad
         y_s = y_mid - swatch // 2
         color = tuple(int(c) for c in ref.color_bgr)
-        cv2.rectangle(out, (x_s, y_s), (x_s + swatch, y_s + swatch),
-                      color, -1)
-        cv2.rectangle(out, (x_s, y_s), (x_s + swatch, y_s + swatch),
-                      (80, 80, 80), 1)
+        cv2.rectangle(out, (x_s, y_s), (x_s + swatch, y_s + swatch), color, -1)
+        cv2.rectangle(out, (x_s, y_s), (x_s + swatch, y_s + swatch), (80, 80, 80), 1)
         cv2.putText(out, ref.name, (x_s + swatch + pad, y_mid + 5),
                     font, scale, (30, 30, 30), thickness, cv2.LINE_AA)
         y += row_h
@@ -186,26 +182,22 @@ def _reference_hue(reference):
 def _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg):
     """Expand confident class seeds to nearby pixels with matching hue.
 
-    Only large seeds expand; small seeds keep their original classification.
-    Expansion ONLY targets pixels not already claimed by any seed, so seeds
-    from one class are never stolen by an adjacent class with a similar hue.
+    Only large enough seeds expand; small seeds keep their original boundaries.
+    Expansion only claims pixels not already assigned, so adjacent same-hue
+    classes do not steal from one another.
     """
     H, W = h.shape
     min_seed_area = cfg.expand_min_seed_area
     if cfg.expand_min_seed_frac > 0.0:
-        min_seed_area = max(min_seed_area, int(round(H * W * cfg.expand_min_seed_frac)))
+        min_seed_area = max(min_seed_area,
+                            int(round(H * W * cfg.expand_min_seed_frac)))
 
-    active = [
-        i for i, mask in enumerate(seed_masks)
-        if int(mask.sum()) >= min_seed_area
-    ]
+    active = [i for i, mask in enumerate(seed_masks)
+              if int(mask.sum()) >= min_seed_area]
     if not active:
         return seed_masks
 
-    # Non-active classes preserve their seeds unchanged
     expanded = [m.copy() for m in seed_masks]
-
-    # Build a mask of all pixels already claimed by ANY seed
     claimed = np.zeros(h.shape, dtype=bool)
     for m in seed_masks:
         claimed |= (m > 0)
@@ -220,9 +212,6 @@ def _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg):
     ], axis=-1)
     nearest = np.argmin(distances, axis=-1)
     nearest_dist = np.take_along_axis(distances, nearest[..., None], axis=-1)[..., 0]
-    # Only expand into UNCLAIMED valid pixels within hue tolerance, and do not
-    # cross strong HSV edges.  This prevents a fruit seed from pulling in a
-    # disconnected, similarly-coloured basket/background region.
     assignable = valid & edge_ok & ~claimed & (nearest_dist <= cfg.expand_hue_tol)
 
     for pos, cidx in enumerate(active):
@@ -244,9 +233,8 @@ def _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg):
     return expanded
 
 
-def side_by_side(source_bgr, overlay_bgr, left_title=None,
-                 right_title=None):
-    """!Compose source and overlay images side by side with simple titles."""
+def side_by_side(source_bgr, overlay_bgr, left_title=None, right_title=None):
+    """!Compose source and overlay images side by side with optional titles."""
     H, W = overlay_bgr.shape[:2]
     if source_bgr.shape[:2] != (H, W):
         source_bgr = cv2.resize(source_bgr, (W, H), interpolation=cv2.INTER_AREA)
@@ -260,8 +248,7 @@ def side_by_side(source_bgr, overlay_bgr, left_title=None,
     thickness = 1
 
     bottom_pad = pad if has_titles else 0
-    out = np.full((H + title_h + bottom_pad, W * 2 + gap, 3),
-                  255, dtype=np.uint8)
+    out = np.full((H + title_h + bottom_pad, W * 2 + gap, 3), 255, dtype=np.uint8)
     y0 = title_h
     out[y0:y0 + H, :W] = source_bgr
     out[y0:y0 + H, W + gap:W * 2 + gap] = overlay_bgr
@@ -277,47 +264,42 @@ def side_by_side(source_bgr, overlay_bgr, left_title=None,
 
 def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=False):
     """!
-    Segment one image and return a colour overlay plus the per-pixel class map.
+    Segment one image and return a colour overlay and the per-pixel class map.
 
-    @param bgr         uint8 BGR image (real-world / multi-fruit).
-    @param references  list[ClassReference] from build_references.
-    @param norm_mean,norm_std  z-score parameters from build_references.
-    @param cfg         SegmentationConfig (defaults used if None).
-    @param return_debug if True also return intermediate maps for slides.
-    @return dict with keys: 'overlay', 'class_map', and (optionally) debug maps.
+    @param bgr          uint8 BGR image.
+    @param references   list[ClassReference] from build_references.
+    @param norm_mean, norm_std  z-score parameters from build_references.
+    @param cfg          SegmentationConfig; defaults used if None.
+    @param return_debug if True, also include intermediate debug maps in the result.
+    @return dict with keys 'overlay' and 'class_map', plus optional debug maps.
     """
     cfg = cfg or SegmentationConfig()
     bgr = _maybe_resize(bgr, cfg.max_side)
 
-    # 1. preprocessing
     pre = median_filter(bgr, cfg.median_ksize)
     pre = gaussian_lowpass(pre, cfg.gaussian_sigma)
 
-    # 2. HSV + guard mask + edges
     h, s, v = to_hsv_float(pre)
     valid = guard_mask(s, v, cfg.s_min, cfg.v_min) & (v <= cfg.v_max)
     edges = _hsv_edge_map(h, s, v, valid) if cfg.use_hsv_edges else sobel_edges(v)
 
-    # 3. split
     split_lbl = split_quadtree(h, s, valid, edges,
                                tau_h=cfg.tau_h, tau_s=cfg.tau_s, tau_e=cfg.tau_e,
-                               min_size=cfg.min_size, min_start_depth=cfg.min_start_depth)
+                               min_size=cfg.min_size,
+                               min_start_depth=cfg.min_start_depth)
 
-    # 4. merge
     merged_lbl = merge_regions(split_lbl, h, s, valid, edges,
                                hue_thresh=cfg.hue_thresh, sat_thresh=cfg.sat_thresh,
-                               merged_var_h=cfg.merged_var_h, merged_var_s=cfg.merged_var_s,
+                               merged_var_h=cfg.merged_var_h,
+                               merged_var_s=cfg.merged_var_s,
                                edge_veto=cfg.edge_veto)
 
-    # 5. features + classification
-    stats = region_features(merged_lbl, h, s, valid, min_valid=cfg.min_valid,
-                            value=v)
+    stats = region_features(merged_lbl, h, s, valid, min_valid=cfg.min_valid, value=v)
     assign = classify_regions(stats, references, norm_mean, norm_std,
                               extended=cfg.extended_features,
                               reject_z=cfg.reject_z, min_valid=cfg.min_valid,
                               weights=cfg.feature_weights)
 
-    # 6. build per-class masks, clean them, compose class map + overlay
     H, W = merged_lbl.shape
     min_area = cfg.min_area
     if cfg.min_area_frac > 0.0:
@@ -346,10 +328,9 @@ def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=F
             mask = area_filter(mask, min_area)
         seed_masks.append(mask)
 
-    masks = _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg) \
-        if cfg.expand_masks else seed_masks
+    masks = (_expand_seed_masks(seed_masks, references, h, s, v, edges, cfg)
+             if cfg.expand_masks else seed_masks)
 
-    # --- suppress minority classes (false positives from hue overlap) ----------
     if cfg.min_class_fraction > 0.0:
         total_labeled = sum(int(m.sum()) for m in masks)
         if total_labeled > 0:
