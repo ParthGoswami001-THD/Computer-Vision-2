@@ -806,9 +806,9 @@ def run_3class_scene_demo(refs3, nmean3, nstd3):
     print("═"*70)
 
     scene_files = [
-        ("cherry_36.jpg",        "Cherry scene"),
+        ("cherry_35.jpg",        "Cherry scene"),
         ("orange_5.jpg",        "Orange scene"),
-        ("banana_orange.jpg",   "Banana + Orange scene"),
+        ("banana(lady_finger)_2.jpg",   "Banana +"),
     ]
     cfg = make_scene_cfg(3)
 
@@ -836,7 +836,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     sp3 = _drop_hex(SPEC_10)
 
     demos = [
-        (os.path.join(MULTI, "cherry_1.jpg"),
+        (os.path.join(MULTI, "cherry(wax)_hazelnut_kiwi_nut.jpg"),
          10, SPEC_10, refs10, nmean10, nstd10,
          "cherry_scene_overlay.png", "Cherry scene  (10-class)"),
         (os.path.join(MULTI, "banana_1.jpg"),
@@ -1023,8 +1023,8 @@ def run_fruits262_3class_proof():
 
     candidates = [
         ("cherry", "0.jpg", 0, "Cherry"),
-        ("orange", "2.jpg",  1, "Orange"),
-        ("banana", "3.jpg",  2, "Banana"),
+        ("orange", "1.jpg",  1, "Orange"),
+        ("banana", "71.jpg",  2, "Banana"),
     ]
 
     target_h = 300
