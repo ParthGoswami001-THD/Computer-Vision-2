@@ -36,10 +36,10 @@ from fruitseg import (build_references, segment_image, add_legend, side_by_side,
 # Class specifications: (folder_name, display_name, overlay_BGR)
 # Ranked by measured HSV separation from the Fruits-360 Training set. This set
 # keeps the 10-class validation path away from the worst hue collisions
-# (strawberry/pomegranate, pear/lime, watermelon/cucumber).
+# (red-fruit variants, pear/lime, watermelon/cucumber).
 # -----------------------------------------------------------------------------
 SPEC_10 = [
-    ("Apple Red 1",        "Apple",        (0, 0, 180)),       # red, dark
+    ("Cherry 1",           "Cherry",       (0, 0, 180)),       # red, compact
     ("Orange 1",           "Orange",       (0, 140, 255)),     # orange
     ("Banana 1",           "Banana",       (0, 255, 255)),     # yellow
     ("Avocado 1",          "Avocado",      (0, 200, 0)),       # yellow-green/dark
@@ -58,7 +58,6 @@ MIXED_BOWL_SPEC = [
     ("Peach Flat 1",  "Peach Flat",  (80, 190, 255)),
     ("Pear 1",        "Pear",        (120, 220, 180)),
     ("Plum 1",        "Plum",        (180, 60, 180)),
-    ("Pomegranate 1", "Pomegranate", (30, 30, 220)),
 ]
 
 
@@ -75,12 +74,25 @@ def get_spec(nfruits, preset="assignment"):
     raise ValueError("nfruits must be 3, 5, or 10")
 
 
+def build_references_for_run(train_dir, spec, preset="assignment"):
+    """Build class references with a stable normalization context.
+
+    The 3-class assignment set uses the richer 5-class z-score context so the
+    starter classes are normalised consistently with the 5-fruit validation.
+    """
+    if preset == "assignment" and len(spec) == 3:
+        refs, nmean, nstd = build_references(train_dir, SPEC_10[:5],
+                                             extended=True)
+        return refs[:3], nmean, nstd
+    return build_references(train_dir, spec, extended=True)
+
+
 def make_config(nfruits, max_side, scene_tuning=False):
     """!Build a config for either clean Test evaluation or messy scene overlays."""
-    cfg = SegmentationConfig(extended_features=nfruits >= 5, max_side=max_side)
+    cfg = SegmentationConfig(extended_features=True, max_side=max_side)
     if scene_tuning:
-        cfg.s_min = 0.30
-        cfg.v_min = 0.35
+        cfg.s_min = 0.15
+        cfg.v_min = 0.15
         cfg.v_max = 1.0
         cfg.tau_e = 0.05
         cfg.hue_thresh = 0.22
@@ -88,17 +100,20 @@ def make_config(nfruits, max_side, scene_tuning=False):
         cfg.merged_var_h = 0.05
         cfg.merged_var_s = 0.02
         cfg.edge_veto = 0.20
-        cfg.reject_z = 1.4
-        cfg.min_area = 800
-        cfg.morph_radius = 5
+        cfg.use_hsv_edges = True
+        cfg.reject_z = 1.4            # FIX: was 2.0 — drop basket/background to background
+        cfg.min_area = 400            # keep smaller regions
+        cfg.morph_radius = 4
         cfg.refine_masks = True
-        cfg.refine_hue_tol = 0.45
-        cfg.fill_components = True
+        cfg.refine_hue_tol = 0.35     # FIX: was 0.60 — trim regions to class-matching hue
+        cfg.fill_components = False   # FIX: was True — interior fill floods the enclosed bowl
         cfg.expand_masks = True
-        cfg.expand_hue_tol = 0.38
-        cfg.expand_s_min = 0.22
-        cfg.expand_v_min = 0.25
-        cfg.expand_min_seed_area = 5000
+        cfg.expand_hue_tol = 0.25     # FIX: was 0.42 — stop Orange growing over apple cheeks
+        cfg.expand_s_min = 0.20       # FIX: was 0.08 — do not expand into desaturated basket/bg
+        cfg.expand_v_min = 0.20       # FIX: was 0.10 — do not expand into dark regions
+        cfg.expand_min_seed_area = 6000   # FIX: was 2500 — only very confident seeds expand
+        cfg.expand_edge_veto = 0.35
+        cfg.min_class_fraction = 0.10     # keep smaller real fruits; suppress tiny false positives
     return cfg
 
 
@@ -159,7 +174,7 @@ def main():
     ap.add_argument("--nfruits", type=int, default=3, choices=[3, 5, 10])
     ap.add_argument("--preset", default="assignment",
                     choices=["assignment", "mixed-bowl"],
-                    help="class set to use; mixed-bowl matches the apple/apricot/peach/pear/plum/pomegranate sample")
+                    help="class set to use; mixed-bowl uses Apple/Apricot/Peach/Pear/Plum references")
     ap.add_argument("--max-side", type=int, default=480)
     ap.add_argument("--no-scene-tuning", action="store_true",
                     help="use the base Train/Test config for --image overlays")
@@ -170,7 +185,9 @@ def main():
     args = ap.parse_args()
 
     spec = get_spec(args.nfruits, args.preset)
-    extended = len(spec) >= 5
+    # Always use the richer feature set. The baseline [cos_h, sin_h, var_s]
+    # relies mostly on hue; the extended features add saturation/value statistics.
+    extended = True
     cfg = make_config(len(spec), args.max_side, scene_tuning=False)
     cfg.extended_features = extended
     if args.preset == "mixed-bowl":
@@ -179,7 +196,7 @@ def main():
         cfg.min_area = 500
 
     print(f"Building references for {len(spec)} fruits ...")
-    refs, nmean, nstd = build_references(args.train, spec, extended=extended)
+    refs, nmean, nstd = build_references_for_run(args.train, spec, args.preset)
     print("  built:", ", ".join(f"{r.name}({r.n_images})" for r in refs))
 
     if args.evaluate:

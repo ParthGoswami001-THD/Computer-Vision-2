@@ -75,21 +75,21 @@ smaller `reject_z`, and stronger cleanup. This keeps non-reference objects such
 as grapes from being forced into the nearest selected fruit class. Use
 `--no-scene-tuning` to disable this preset.
 
-For the provided mixed bowl image
-`apple_apricot_peach_peach(flat)_pear_plum_pomegranate_3.jpg`, use the
+For a mixed fruit image such as `apple_peach_pear_plum_tomato.jpg`, use the
 matching class preset instead of the generic assignment 10-fruit set:
 
 ```
 python scripts/run.py --train data/Fruits-360/fruits-360_100x100/fruits-360/Training \
-              --image "data/Fruits-360/fruits-360_multi/test-multiple_fruits/apple_apricot_peach_peach(flat)_pear_plum_pomegranate_3.jpg" \
-              --out results/apple_apricot_peach_pear_plum_pomegranate_overlay.png \
+              --image "data/Fruits-360/fruits-360_multi/test-multiple_fruits/apple_peach_pear_plum_tomato.jpg" \
+              --out results/apple_peach_pear_plum_overlay.png \
               --preset mixed-bowl --max-side 640
 ```
 
 This preset builds references for Apple, Apricot, Peach, Peach Flat, Pear, Plum,
-and Pomegranate. The dark plum is difficult for HSV-only segmentation because
-most of its usable colour lies in low-luminance pixels, so the pipeline rejects
-uncertain plum pixels rather than forcing a large wrong label.
+and related warm-colour fruits. The dark plum is difficult for HSV-only
+segmentation because most of its usable colour lies in low-luminance pixels, so
+the pipeline rejects uncertain plum pixels rather than forcing a large wrong
+label.
 
 ## 3. Adjusting the fruit classes
 

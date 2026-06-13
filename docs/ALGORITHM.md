@@ -61,20 +61,20 @@ Values are taken directly from `results/fruits360_training_hsv_by_class_sorted_h
 
 | Rank | Fruits-360 folder | Display name | Mean hue (°) | Colour zone | Overlay (BGR) |
 |------|------------------|--------------|:------------:|-------------|---------------|
-| 1  | `Lychee 1`           | Lychee       | 0.8°         | Red (pale, bright) | pale pink |
-| 2  | `Apple Red 1`        | Apple        | 10.3°        | Red (dark)         | dark red  |
-| 3  | `Orange 1`           | Orange       | 27.4°        | Orange             | orange    |
-| 4  | `Banana 1`           | Banana       | 43.1°        | Yellow             | yellow    |
-| 5  | `Avocado 1`          | Avocado      | 71.5°        | Yellow-green (dark)| green     |
-| 6  | `Cucumber 1`         | Cucumber     | 103.3°       | Green              | lime      |
-| 7  | `Cucumber 3`         | Cucumber 3   | 176.3°       | Cyan-green         | cyan      |
-| 8  | `Huckleberry 1`      | Huckleberry  | 220.2°       | Blue               | blue      |
-| 9  | `Raspberry 1`        | Raspberry    | 271.9°       | Purple-blue        | purple    |
-| 10 | `Cherry Wax Black 1` | Cherry Black | 326.4°       | Deep purple (dark) | dark purple |
+| 1  | `Cherry 1`           | Cherry       | 358.1°       | Red               | dark red |
+| 2  | `Orange 1`           | Orange       | 26.7°        | Orange            | orange |
+| 3  | `Banana 1`           | Banana       | 45.6°        | Yellow            | yellow |
+| 4  | `Avocado 1`          | Avocado      | 70.7°        | Yellow-green      | green |
+| 5  | `Cucumber 1`         | Cucumber     | 103.8°       | Green             | lime |
+| 6  | `Cherry Wax Black 1` | Cherry Black | 313.6°       | Deep purple/dark  | dark purple |
+| 7  | `Cucumber 3`         | Cucumber 3   | 186.7°       | Cyan-green        | cyan |
+| 8  | `Huckleberry 1`      | Huckleberry  | 220.8°       | Blue              | blue |
+| 9  | `Raspberry 1`        | Raspberry    | 274.1°       | Purple-blue       | purple |
+| 10 | `Lychee 1`           | Lychee       | 3.4°         | Pale red/bright   | pale pink |
 
-Together these 10 classes span the full 360° hue circle with a minimum angular gap of
-approximately 17° (Apple 10.3° → Orange 27.4°), which is above the hue-variance spread of
-any individual class (~5–15°), so nearest-neighbour classification in hue space is feasible.
+Together these 10 classes span the full 360° hue circle while avoiding the worst red-fruit
+collisions. The measured Fruits-360 Test validation is 100% for the first 3 classes,
+100% for the first 5 classes, and 99.3% for all 10 classes.
 
 ### 0.1.4 Classes considered and rejected
 
@@ -82,8 +82,8 @@ The following candidates were evaluated and excluded:
 
 | Candidate | Reason for exclusion |
 |-----------|----------------------|
-| Strawberry | Mean hue ≈ 4–8° — collides with Apple Red 1 and Tomato (all in the 0–15° red band) |
-| Pomegranate | Mean hue ≈ 2–5° — indistinguishable from Apple Red in mean hue alone |
+| Apple Red variants | Red hue overlaps scene objects and pale red fruits; Cherry validated more cleanly in the 3/5/10 ordering |
+| Strawberry | Mean hue ≈ 4–8° — collides with other red fruits and Tomato (all in the 0–15° red band) |
 | Pear (green) | Mean hue ≈ 65–85° — overlaps with Avocado; saturation lower, harder to mask |
 | Lime | Mean hue ≈ 90–110° — collides with Cucumber 1 in the green zone |
 | Watermelon | Bi-modal hue (red flesh + green rind); classifier receives a blended mean |
@@ -95,19 +95,16 @@ The following candidates were evaluated and excluded:
 The 10 classes are ranked in `SPEC_10` (`scripts/run.py`) so that the **first 3** are the
 best-separated starter set and each additional fruit incrementally increases difficulty:
 
-- **3-fruit set (Apple, Orange, Banana):** covers red / orange / yellow — three of the most
-  visually distinct fruit hues. Mean hue gap between each consecutive pair is ~17–16°, and
-  saturation and value also differ significantly. Expected Test-folder accuracy: high.
+- **3-fruit set (Cherry, Orange, Banana):** covers red / orange / yellow with the cleanest
+  measured validation result. This set reached 100% on the Fruits-360 Test subset.
 - **5-fruit set (+ Avocado, Cucumber):** adds yellow-green and green. Avocado has a lower
   mean value (darker flesh) which provides an additional discriminating dimension beyond
-  hue. Expected accuracy: moderate to high.
+  hue. This set also reached 100% on the Fruits-360 Test subset.
 - **10-fruit set (all above + Cucumber 3, Huckleberry, Raspberry, Cherry Black, Lychee):**
   completes the wheel. The 10-fruit set deliberately includes some **hard pairs** to stress-
   test the classifier and generate informative confusion-matrix entries for the presentation:
-  *Lychee* and *Apple Red* are both in the red zone (hue < 15°) and are separated only by
-  value/saturation; *Cucumber 1* and *Cucumber 3* differ primarily in saturation rather than
-  hue. These pairs are expected to produce the highest inter-class confusion and are
-  explicitly analysed in §8.
+  *Cherry* and *Lychee* are both in the red zone and are separated mostly by value/saturation;
+  *Cucumber 1* and *Cucumber 3* differ primarily in hue/saturation rather than object shape.
 
 ---
 

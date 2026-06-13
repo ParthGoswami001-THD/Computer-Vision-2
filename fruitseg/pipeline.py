@@ -19,7 +19,7 @@ from .color_space import to_hsv_float, guard_mask
 from .split_merge import split_quadtree, merge_regions
 from .features import region_features
 from .classify import classify_regions
-from .postprocess import morphological_cleanup, area_filter
+from .postprocess import morphological_cleanup, area_filter, _connected_components_8
 
 
 @dataclass
@@ -44,6 +44,7 @@ class SegmentationConfig:
     merged_var_h: float = 0.08
     merged_var_s: float = 0.03
     edge_veto: float = 0.35
+    use_hsv_edges: bool = False
     # classification
     extended_features: bool = True
     reject_z: float = 1.8
@@ -60,6 +61,10 @@ class SegmentationConfig:
     expand_s_min: float = 0.22
     expand_v_min: float = 0.25
     expand_min_seed_area: int = 5000
+    expand_edge_veto: float = 1.0
+    # suppress classes that cover less than this fraction of all labeled pixels
+    # (0 = no filtering; set to ~0.05 for scene images to kill false positives)
+    min_class_fraction: float = 0.0
     # speed: longest side the image is resized to before processing (0 = no resize)
     max_side: int = 320
 
@@ -70,6 +75,18 @@ def _maybe_resize(bgr, max_side):
         new = (int(bgr.shape[1] * scale), int(bgr.shape[0] * scale))
         return cv2.resize(bgr, new, interpolation=cv2.INTER_AREA)
     return bgr
+
+
+def _hsv_edge_map(h, s, v, valid):
+    """Combine value, saturation and circular-hue edges for scene boundaries."""
+    e_v = sobel_edges(v)
+    e_s = sobel_edges(s)
+    valid_f = valid.astype(np.float32)
+    e_h_cos = sobel_edges((np.cos(h) * valid_f).astype(np.float32))
+    e_h_sin = sobel_edges((np.sin(h) * valid_f).astype(np.float32))
+    e_h = np.maximum(e_h_cos, e_h_sin)
+    return np.clip(np.maximum(e_v, np.maximum(0.7 * e_s, 0.7 * e_h)),
+                   0.0, 1.0).astype(np.float32)
 
 
 def _fill_components(mask):
@@ -164,12 +181,12 @@ def _reference_hue(reference):
                             reference.mean_feature[0]) % (2 * np.pi))
 
 
-def _expand_seed_masks(seed_masks, references, h, s, v, cfg):
+def _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg):
     """Expand confident class seeds to nearby pixels with matching hue.
 
-    The split/merge classifier gives conservative seeds in real scenes.  For
-    presentation overlays, expanding only large confident seeds produces more
-    complete fruit shapes while suppressing small accidental labels.
+    Only large seeds expand; small seeds keep their original classification.
+    Expansion ONLY targets pixels not already claimed by any seed, so seeds
+    from one class are never stolen by an adjacent class with a similar hue.
     """
     active = [
         i for i, mask in enumerate(seed_masks)
@@ -178,7 +195,16 @@ def _expand_seed_masks(seed_masks, references, h, s, v, cfg):
     if not active:
         return seed_masks
 
+    # Non-active classes preserve their seeds unchanged
+    expanded = [m.copy() for m in seed_masks]
+
+    # Build a mask of all pixels already claimed by ANY seed
+    claimed = np.zeros(h.shape, dtype=bool)
+    for m in seed_masks:
+        claimed |= (m > 0)
+
     valid = guard_mask(s, v, cfg.expand_s_min, cfg.expand_v_min) & (v <= cfg.v_max)
+    edge_ok = edges <= cfg.expand_edge_veto
     ref_hues = np.array([_reference_hue(references[i]) for i in active],
                         dtype=np.float32)
     distances = np.stack([
@@ -187,17 +213,27 @@ def _expand_seed_masks(seed_masks, references, h, s, v, cfg):
     ], axis=-1)
     nearest = np.argmin(distances, axis=-1)
     nearest_dist = np.take_along_axis(distances, nearest[..., None], axis=-1)[..., 0]
-    assignable = valid & (nearest_dist <= cfg.expand_hue_tol)
+    # Only expand into UNCLAIMED valid pixels within hue tolerance, and do not
+    # cross strong HSV edges.  This prevents a fruit seed from pulling in a
+    # disconnected, similarly-coloured basket/background region.
+    assignable = valid & edge_ok & ~claimed & (nearest_dist <= cfg.expand_hue_tol)
 
-    expanded = [np.zeros_like(mask, dtype=np.uint8) for mask in seed_masks]
     for pos, cidx in enumerate(active):
-        mask = ((nearest == pos) & assignable).astype(np.uint8)
-        mask = morphological_cleanup(mask, cfg.morph_radius)
-        mask = area_filter(mask, cfg.min_area)
+        seed = (seed_masks[cidx] > 0)
+        candidate = seed | ((nearest == pos) & assignable)
+        labels, _areas = _connected_components_8(candidate.astype(np.uint8))
+        seed_labels = np.unique(labels[seed])
+        seed_labels = seed_labels[seed_labels > 0]
+        if seed_labels.size:
+            new_px = np.isin(labels, seed_labels).astype(np.uint8)
+        else:
+            new_px = seed.astype(np.uint8)
+        new_px = morphological_cleanup(new_px, cfg.morph_radius)
+        new_px = area_filter(new_px, cfg.min_area)
         if cfg.fill_components:
-            mask = _fill_components(mask)
-            mask = area_filter(mask, cfg.min_area)
-        expanded[cidx] = mask
+            new_px = _fill_components(new_px)
+            new_px = area_filter(new_px, cfg.min_area)
+        expanded[cidx] = new_px
     return expanded
 
 
@@ -253,7 +289,7 @@ def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=F
     # 2. HSV + guard mask + edges
     h, s, v = to_hsv_float(pre)
     valid = guard_mask(s, v, cfg.s_min, cfg.v_min) & (v <= cfg.v_max)
-    edges = sobel_edges(v)
+    edges = _hsv_edge_map(h, s, v, valid) if cfg.use_hsv_edges else sobel_edges(v)
 
     # 3. split
     split_lbl = split_quadtree(h, s, valid, edges,
@@ -300,8 +336,18 @@ def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=F
             mask = area_filter(mask, cfg.min_area)
         seed_masks.append(mask)
 
-    masks = _expand_seed_masks(seed_masks, references, h, s, v, cfg) \
+    masks = _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg) \
         if cfg.expand_masks else seed_masks
+
+    # --- suppress minority classes (false positives from hue overlap) ----------
+    if cfg.min_class_fraction > 0.0:
+        total_labeled = sum(int(m.sum()) for m in masks)
+        if total_labeled > 0:
+            masks = [
+                m if (int(m.sum()) / total_labeled >= cfg.min_class_fraction)
+                else np.zeros_like(m)
+                for m in masks
+            ]
 
     for cidx, mask in enumerate(masks):
         if not mask.any():
