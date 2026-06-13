@@ -288,7 +288,7 @@ def run_pipeline_visualisation(refs, nmean, nstd):
     print("2.  PIPELINE-STEP VISUALISATION")
     print("═"*70)
 
-    img_path = os.path.join(MULTI, "banana_orange.jpg")
+    img_path = os.path.join(MULTI, "banana_2.jpg")
     bgr = cv2.imread(img_path)
     bgr = cv2.resize(bgr, (640, int(bgr.shape[0] * 640 / bgr.shape[1])))
 
@@ -836,7 +836,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     sp3 = _drop_hex(SPEC_10)
 
     demos = [
-        (os.path.join(MULTI, "cherry(wax)_hazelnut_kiwi_nut.jpg"),
+        (os.path.join(MULTI, "cherry_47.jpg"),
          10, SPEC_10, refs10, nmean10, nstd10,
          "cherry_scene_overlay.png", "Cherry scene  (10-class)"),
         (os.path.join(MULTI, "banana_1.jpg"),
