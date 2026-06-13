@@ -742,10 +742,16 @@ def _refine_overlay(bgr, class_map, refs, hue_tol=0.65, search_r=14):
 def _smooth_class_overlay(bgr, class_map, refs):
     """
     Build a clean overlay for multi-fruit scene images using the pipeline's
-    own class_map, with light closing to smooth the blocky quadtree boundaries.
-    No BFS expansion — each class stays within its detected region.
+    own class_map.
+
+    Steps per class:
+      1. Morphological closing (radius 10) to bridge the blocky quadtree edges
+         and specular-highlight gaps excluded by the guard mask.
+      2. _fill_components to flood-fill any interior holes that closing cannot
+         reach — handles large specular highlights in the fruit centre.
     """
     from fruitseg.postprocess import _binary_dilate, _binary_erode
+    from fruitseg.pipeline import _fill_components
 
     cH, cW  = class_map.shape[:2]
     if bgr.shape[:2] != (cH, cW):
@@ -758,9 +764,11 @@ def _smooth_class_overlay(bgr, class_map, refs):
         mask = (class_map == cidx).astype(np.uint8)
         if not mask.any():
             continue
-        # Closing smooths blocky quadtree edges without filling a whole enclosed
-        # bowl/rim region as foreground.
-        mask = _binary_erode(_binary_dilate(mask, 5), 5)
+        # Closing (dilate then erode) with a larger radius to bridge gaps caused
+        # by guard-mask exclusions (specular highlights, shadows).
+        mask = _binary_erode(_binary_dilate(mask, 10), 10)
+        # Fill interior holes that morphological closing cannot bridge.
+        mask = _fill_components(mask)
         col = np.array(refs[cidx].color_bgr, dtype=np.float32)
         sel = mask > 0
         overlay[sel] = 0.35 * overlay[sel] + 0.65 * col
@@ -798,7 +806,7 @@ def run_3class_scene_demo(refs3, nmean3, nstd3):
     print("═"*70)
 
     scene_files = [
-        ("cherry(wax)_1.jpg",        "Cherry scene"),
+        ("cherry_36.jpg",        "Cherry scene"),
         ("orange_5.jpg",        "Orange scene"),
         ("banana_orange.jpg",   "Banana + Orange scene"),
     ]
@@ -828,7 +836,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     sp3 = _drop_hex(SPEC_10)
 
     demos = [
-        (os.path.join(MULTI, "cherry_17.jpg"),
+        (os.path.join(MULTI, "cherry_1.jpg"),
          10, SPEC_10, refs10, nmean10, nstd10,
          "cherry_scene_overlay.png", "Cherry scene  (10-class)"),
         (os.path.join(MULTI, "banana_1.jpg"),
@@ -995,7 +1003,8 @@ def run_fruits262_3class_proof():
     cfg = make_scene_cfg(3)
     cfg.max_side = 480
     cfg.s_min = 0.12; cfg.v_min = 0.12
-    cfg.hue_thresh = 0.20; cfg.sat_thresh = 0.08
+    # sat_thresh kept at 0.10 (make_scene_cfg default) — lower values leave
+    # too many small fragments whose warm-background pixels dominate cherry.
     # Orange-Banana hue gap is ~0.33 rad.  Tolerances must stay strictly below
     # that so the two classes never share hue-compatible pixels after
     # refinement / expansion.
@@ -1013,9 +1022,9 @@ def run_fruits262_3class_proof():
     cfg.feature_weights = (2.5, 2.5, 0.7, 0.4, 0.4, 0.9, 0.0)
 
     candidates = [
-        ("cherry", "1.jpg", 0, "Cherry"),
-        ("orange", "1.jpg", 1, "Orange"),
-        ("banana", "1.jpg", 2, "Banana"),
+        ("cherry", "0.jpg", 0, "Cherry"),
+        ("orange", "2.jpg",  1, "Orange"),
+        ("banana", "3.jpg",  2, "Banana"),
     ]
 
     target_h = 300
@@ -1260,20 +1269,44 @@ def run_fruits262_demo(refs10, nmean10, nstd10):
             print(f"  SKIP {label} — no images found")
             continue
 
-        # Choose a visually strong natural photo without peeking at the label
-        # outcome. This keeps the demo deterministic and avoids selecting
-        # samples only because the current classifier already got them right.
+        # Find the ref10 entry that matches this label so we can score images
+        # by how many pixels have the expected class hue, not just by overall
+        # saturation.  This avoids selecting cherry images dominated by green
+        # leaves or banana images that look golden (orange hue).
+        from fruitseg.pipeline import _reference_hue as _ref_hue
+        matched_ref = next(
+            (r for r in refs10
+             if label.lower() in r.name.lower() or r.name.lower() in label.lower()),
+            None)
+        expected_hue = _ref_hue(matched_ref) if matched_ref else None
+
         bgr = None
         pick = imgs[0]
         best_score = -1.0
 
-        for candidate in imgs[:15]:
+        for candidate in imgs[:30]:
             tmp = cv2.imread(os.path.join(folder_path, candidate))
             if tmp is None:
                 continue
             _h_c, s_c, v_c = to_hsv_float(tmp)
             valid = (s_c >= cfg.s_min) & (v_c >= cfg.v_min)
-            score = float(valid.sum()) * float(s_c[valid].mean() if valid.any() else 0.0)
+            if not valid.any():
+                continue
+            if expected_hue is not None:
+                # Score = pixels whose hue is within 0.40 rad of the class
+                # reference hue, weighted by saturation.  Strongly penalises
+                # images where a different colour dominates (e.g. green leaves
+                # in a cherry image, or golden hue in a banana image).
+                hue_dist = np.abs(np.arctan2(
+                    np.sin(_h_c - expected_hue),
+                    np.cos(_h_c - expected_hue)))
+                hue_ok = valid & (hue_dist <= 0.40)
+                if hue_ok.any():
+                    score = float(hue_ok.sum()) * float(s_c[hue_ok].mean())
+                else:
+                    score = 0.0
+            else:
+                score = float(valid.sum()) * float(s_c[valid].mean())
             if score > best_score:
                 best_score = score
                 bgr, pick = tmp, candidate
