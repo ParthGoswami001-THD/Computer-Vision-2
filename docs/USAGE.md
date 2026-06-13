@@ -69,11 +69,11 @@ python scripts/run.py --train /path/to/Fruits-360/Training \
 
 Writes `overlay.png` with each detected fruit class tinted in its colour
 (red, yellow, green, …), to resemble the assignment's target figure. For
-`--image` runs, the CLI uses a stricter real-scene preset than the validation
-run: higher `s_min`/`v_min`, lower merge tolerances, stronger edge veto,
-smaller `reject_z`, and stronger cleanup. This keeps non-reference objects such
-as grapes from being forced into the nearest selected fruit class. Use
-`--no-scene-tuning` to disable this preset.
+`--image` runs, the CLI uses the same final Train-derived algorithm with an
+adaptive scene preset intended for qualitative transfer to cluttered images.
+This scene path is **not** a separate evaluation protocol and should not be
+reported as quantitative validation. Use `--no-scene-tuning` to disable this
+preset and inspect the base config directly.
 
 
 ## 3. Adjusting the fruit classes
@@ -102,13 +102,23 @@ will most likely tune on the Train set:
 | `min_area`       | drop connected components smaller than this               |
 | `refine_masks`, `refine_hue_tol` | trim classified regions back to class-matching pixels |
 
-`scripts/run.py` keeps the base config for `--evaluate` so the confusion matrix
-is measured on the intended clean Test images. It applies stricter guard,
-merge, rejection, mask-refinement, and cleanup settings only for `--image`
-scene overlays.
+`scripts/run.py` keeps the base evaluation path for `--evaluate` so the
+confusion matrix is measured on the intended clean Test images only. The
+`--image` path reuses the same Train-derived logic but enables the adaptive
+scene preset for qualitative real-scene overlays.
 
 **Tune on Train only.** Using Test or Fruits-262 to tune parameters is flagged as
 cheating in the assignment.
+
+## 4.1 Reporting methodology
+
+- Use **Fruits-360 Test** as the only quantitative validation set.
+- Present `test-multiple_fruits` overlays as qualitative scene demonstrations.
+- Present Fruits-262 as a **cross-dataset proof-of-concept / transfer test**,
+  not as a tuning set and not as quantitative evaluation.
+- The 7-D feature vector, adaptive rejection, and scene-cleanup steps are
+  extensions beyond the minimal baseline and should be described as such in the
+  report or defense.
 
 ## 5. Producing debug images for the slides
 

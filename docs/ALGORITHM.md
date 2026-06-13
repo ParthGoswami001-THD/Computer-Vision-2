@@ -24,6 +24,8 @@ algorithm operating in the HSV colour space**. The pipeline must:
 Development and parameter tuning use the **Fruits-360 Train** folder only. Validation uses
 the **Fruits-360 Test** folder. Realistic image testing uses the Fruits-360
 `test-multiple_fruits` folder first, then selected scene images from **Fruits-262** [9], [10].
+These scene datasets are treated as **qualitative transfer tests**, not as tuning sets and
+not as quantitative validation.
 
 ---
 
@@ -304,8 +306,9 @@ RGB image
   accuracy drops. This is the predicted worst-case as the class count grows 3 → 5 → 10.
 - **Blocky boundaries.** The regular quadtree split favours axis-aligned, blocky region edges
   [2]; morphology mitigates but does not fully remove this.
-- **Threshold sensitivity.** Fixed `tau_H`, `tau_S`, `tau_E` tuned on Train may not transfer
-  perfectly to `test-multiple_fruits` or Fruits-262 scene images; this is a known limitation
+- **Threshold sensitivity.** Even with Train-derived adaptive cleanup and rejection logic,
+  thresholds calibrated on Fruits-360 Train may not transfer perfectly to
+  `test-multiple_fruits` or Fruits-262 scene images; this is a known limitation
   of block-thresholded split-and-merge.
 - **Achromatic regions.** Where luminance/saturation are low the guard mask excludes pixels,
   so very dark or desaturated fruits (or occluded ones) may be under-segmented — an acceptable,
@@ -313,6 +316,14 @@ RGB image
 
 Per the assignment, failing some separations is acceptable; the deliverable is a scientific
 explanation of *why* each failure occurs, supported by the per-class confusion matrices.
+
+### Methodology note
+
+The implementation includes several extensions for robustness: a richer 7-D colour feature,
+adaptive rejection based on nearest/second-nearest class separation, and image-size-aware
+post-processing thresholds. These are still classical, non-deep-learning steps and remain
+within the assignment's split-and-merge framework, but they should be described as
+extensions beyond the minimal baseline criterion.
 
 ---
 

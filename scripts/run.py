@@ -90,8 +90,9 @@ def make_config(nfruits, max_side, scene_tuning=False):
         cfg.merged_var_s = 0.02
         cfg.edge_veto = 0.20
         cfg.use_hsv_edges = True
-        cfg.reject_z = 1.4            # FIX: was 2.0 — drop basket/background to background
-        cfg.min_area = 400            # keep smaller regions
+        cfg.reject_z = 1.55           # scene-safe default; adaptive classifier handles drift
+        cfg.min_area = 80
+        cfg.min_area_frac = 0.0008
         cfg.morph_radius = 4
         cfg.refine_masks = True
         cfg.refine_hue_tol = 0.35     # FIX: was 0.60 — trim regions to class-matching hue
@@ -100,7 +101,8 @@ def make_config(nfruits, max_side, scene_tuning=False):
         cfg.expand_hue_tol = 0.25     # FIX: was 0.42 — stop color bleeding at boundaries
         cfg.expand_s_min = 0.20       # FIX: was 0.08 — do not expand into desaturated basket/bg
         cfg.expand_v_min = 0.20       # FIX: was 0.10 — do not expand into dark regions
-        cfg.expand_min_seed_area = 6000   # FIX: was 2500 — only very confident seeds expand
+        cfg.expand_min_seed_area = 180
+        cfg.expand_min_seed_frac = 0.0045
         cfg.expand_edge_veto = 0.35
         cfg.min_class_fraction = 0.10     # keep smaller real fruits; suppress tiny false positives
     return cfg
@@ -110,6 +112,7 @@ def _save_report(result, path, spec, refs):
     """Save confusion matrix, per-class metrics, and per-file outcomes to CSV."""
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     names = result["labels"]
+    pred_names = result.get("pred_labels", names)
     conf = result["confusion"]
     m = result["metrics"]
     ref_by_name = {r.name: r for r in refs}
@@ -119,7 +122,7 @@ def _save_report(result, path, spec, refs):
 
         # --- confusion matrix -------------------------------------------------
         w.writerow(["=== CONFUSION MATRIX (rows=true, cols=predicted) ==="])
-        w.writerow([""] + names)
+        w.writerow([""] + pred_names)
         for i, row in enumerate(conf):
             w.writerow([names[i]] + list(row))
         w.writerow([])

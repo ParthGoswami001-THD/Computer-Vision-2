@@ -37,12 +37,13 @@ def evaluate_classification(test_dir, class_spec, references, norm_mean, norm_st
     @param references,norm_mean,norm_std  classifier parameters.
     @param cfg        SegmentationConfig.
     @param max_per_class images sampled per class.
-    @return dict: confusion (n x n), labels, metrics, and filename logs.
+    @return dict: confusion (n x (n+1)), labels, metrics, and filename logs.
     """
     cfg = cfg or SegmentationConfig()
     names = [r.name for r in references]
+    pred_names = names + ["background"]
     n = len(references)
-    confusion = np.zeros((n, n), dtype=int)
+    confusion = np.zeros((n, n + 1), dtype=int)
     correct_files, wrong_files = [], []
 
     for true_idx, (folder, name, _color) in enumerate(class_spec):
@@ -56,6 +57,7 @@ def evaluate_classification(test_dir, class_spec, references, norm_mean, norm_st
             res = segment_image(img, references, norm_mean, norm_std, cfg)
             pred = _dominant_class(res["class_map"], n)
             if pred < 0:
+                confusion[true_idx, n] += 1
                 wrong_files.append((p, name, "background"))
                 continue
             confusion[true_idx, pred] += 1
@@ -68,6 +70,7 @@ def evaluate_classification(test_dir, class_spec, references, norm_mean, norm_st
     return {
         "confusion": confusion,
         "labels": names,
+        "pred_labels": pred_names,
         "metrics": metrics,
         "correct_files": correct_files,
         "wrong_files": wrong_files,
@@ -76,10 +79,10 @@ def evaluate_classification(test_dir, class_spec, references, norm_mean, norm_st
 
 def metrics_from_confusion(confusion, names):
     """!Compute per-class precision, recall, F1 and overall accuracy (own code)."""
-    n = confusion.shape[0]
+    n = len(names)
     out = {}
     total = confusion.sum()
-    diag = np.trace(confusion)
+    diag = sum(confusion[i, i] for i in range(n))
     out["overall_accuracy"] = float(diag / total) if total else 0.0
     per_class = {}
     for i in range(n):
@@ -109,12 +112,14 @@ def print_report(result, show_files=True):
                        documentation requirement).
     """
     names = result["labels"]
+    pred_names = result.get("pred_labels", names)
     conf = result["confusion"]
     w = max(len(s) for s in names) + 1
+    wp = max(len(s) for s in pred_names[:]) + 1
     print("\nConfusion matrix (rows = true, cols = predicted):")
-    print(" " * (w + 1) + " ".join(f"{s[:6]:>7}" for s in names))
+    print(" " * (w + 1) + " ".join(f"{s[:10]:>{wp}}" for s in pred_names))
     for i, row in enumerate(conf):
-        print(f"{names[i]:<{w}} " + " ".join(f"{v:>7d}" for v in row))
+        print(f"{names[i]:<{w}} " + " ".join(f"{v:>{wp}d}" for v in row))
     m = result["metrics"]
     print(f"\nOverall accuracy: {m['overall_accuracy']:.3f}")
     print(f"\n{'class':<{w}} {'prec':>6} {'recall':>7} {'f1':>6} {'n':>5}")

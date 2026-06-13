@@ -53,6 +53,7 @@ class SegmentationConfig:
     # post-processing
     morph_radius: int = 3
     min_area: int = 150
+    min_area_frac: float = 0.0
     refine_masks: bool = False
     refine_hue_tol: float = 0.45
     fill_components: bool = False
@@ -61,6 +62,7 @@ class SegmentationConfig:
     expand_s_min: float = 0.22
     expand_v_min: float = 0.25
     expand_min_seed_area: int = 5000
+    expand_min_seed_frac: float = 0.0
     expand_edge_veto: float = 1.0
     # suppress classes that cover less than this fraction of all labeled pixels
     # (0 = no filtering; set to ~0.05 for scene images to kill false positives)
@@ -188,9 +190,14 @@ def _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg):
     Expansion ONLY targets pixels not already claimed by any seed, so seeds
     from one class are never stolen by an adjacent class with a similar hue.
     """
+    H, W = h.shape
+    min_seed_area = cfg.expand_min_seed_area
+    if cfg.expand_min_seed_frac > 0.0:
+        min_seed_area = max(min_seed_area, int(round(H * W * cfg.expand_min_seed_frac)))
+
     active = [
         i for i, mask in enumerate(seed_masks)
-        if int(mask.sum()) >= cfg.expand_min_seed_area
+        if int(mask.sum()) >= min_seed_area
     ]
     if not active:
         return seed_masks
@@ -312,6 +319,9 @@ def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=F
 
     # 6. build per-class masks, clean them, compose class map + overlay
     H, W = merged_lbl.shape
+    min_area = cfg.min_area
+    if cfg.min_area_frac > 0.0:
+        min_area = max(min_area, int(round(H * W * cfg.min_area_frac)))
     class_map = np.full((H, W), -1, dtype=np.int32)
     overlay = bgr.copy()
     n_classes = len(references)
@@ -330,10 +340,10 @@ def segment_image(bgr, references, norm_mean, norm_std, cfg=None, return_debug=F
             mask = mask & valid & (hue_delta <= cfg.refine_hue_tol)
         mask = mask.astype(np.uint8)
         mask = morphological_cleanup(mask, cfg.morph_radius)
-        mask = area_filter(mask, cfg.min_area)
+        mask = area_filter(mask, min_area)
         if cfg.fill_components:
             mask = _fill_components(mask)
-            mask = area_filter(mask, cfg.min_area)
+            mask = area_filter(mask, min_area)
         seed_masks.append(mask)
 
     masks = _expand_seed_masks(seed_masks, references, h, s, v, edges, cfg) \

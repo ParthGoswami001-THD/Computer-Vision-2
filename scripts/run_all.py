@@ -99,11 +99,13 @@ def make_scene_cfg(nfruits=10):
     cfg.s_min = 0.15; cfg.v_min = 0.15; cfg.v_max = 1.0
     cfg.tau_e = 0.05; cfg.hue_thresh = 0.22; cfg.sat_thresh = 0.10
     cfg.merged_var_h = 0.05; cfg.merged_var_s = 0.02; cfg.edge_veto = 0.20
-    cfg.reject_z = 1.4; cfg.min_area = 400; cfg.morph_radius = 4
+    cfg.use_hsv_edges = True
+    cfg.reject_z = 1.55; cfg.min_area = 80; cfg.min_area_frac = 0.0008; cfg.morph_radius = 4
     cfg.refine_masks = True; cfg.refine_hue_tol = 0.35; cfg.fill_components = False
     cfg.expand_masks = True; cfg.expand_hue_tol = 0.25
     cfg.expand_s_min = 0.20; cfg.expand_v_min = 0.20
-    cfg.expand_min_seed_area = 6000; cfg.min_class_fraction = 0.10
+    cfg.expand_min_seed_area = 180; cfg.expand_min_seed_frac = 0.0045
+    cfg.min_class_fraction = 0.10
     return cfg
 
 
@@ -361,26 +363,27 @@ def run_pipeline_visualisation(refs, nmean, nstd):
 # 3. QUANTITATIVE EVALUATION  (3 / 5 / 10 fruits)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _draw_confusion_heatmap(confusion, labels, title, outpath):
-    n = len(labels)
+def _draw_confusion_heatmap(confusion, true_labels, pred_labels, title, outpath):
+    n_rows = len(true_labels)
+    n_cols = len(pred_labels)
     with plt.rc_context(PLT_STYLE):
-        fig, ax = plt.subplots(figsize=(max(6, n * 1.1), max(5, n * 0.95)),
+        fig, ax = plt.subplots(figsize=(max(6, n_cols * 1.1), max(5, n_rows * 0.95)),
                                facecolor="white")
         ax.set_facecolor("white")
 
         im = ax.imshow(confusion, cmap="Blues", aspect="equal")
         plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
-        ax.set_xticks(range(n)); ax.set_xticklabels(labels, rotation=40,
-                                                     ha="right", fontsize=11)
-        ax.set_yticks(range(n)); ax.set_yticklabels(labels, fontsize=11)
+        ax.set_xticks(range(n_cols)); ax.set_xticklabels(pred_labels, rotation=40,
+                                                         ha="right", fontsize=11)
+        ax.set_yticks(range(n_rows)); ax.set_yticklabels(true_labels, fontsize=11)
         ax.set_xlabel("Predicted", fontsize=13, labelpad=8)
         ax.set_ylabel("True", fontsize=13, labelpad=8)
         ax.set_title(title, fontsize=15, color="#111111", fontweight="bold", pad=12)
 
         vmax = confusion.max() if confusion.max() > 0 else 1
-        for i in range(n):
-            for j in range(n):
+        for i in range(n_rows):
+            for j in range(n_cols):
                 v = confusion[i, j]
                 txt_col = "white" if v > 0.55 * vmax else "#111111"
                 weight = "bold" if i == j else "normal"
@@ -452,8 +455,9 @@ def run_evaluation():
 
         # confusion heatmap
         labels = [s[1] for s in spec]
+        pred_labels = result.get("pred_labels", labels)
         _draw_confusion_heatmap(
-            result["confusion"], labels,
+            result["confusion"], labels, pred_labels,
             f"Confusion Matrix — {n}-class  (accuracy = {acc*100:.1f}%)",
             os.path.join(GRAPHS, f"confusion_{tag}.png")
         )
@@ -472,13 +476,14 @@ def run_evaluation():
 
 def _save_csv(result, path, refs):
     names = result["labels"]
+    pred_names = result.get("pred_labels", names)
     conf  = result["confusion"]
     m     = result["metrics"]
     ref_by_name = {r.name: r for r in refs}
     with open(path, "w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["=== CONFUSION MATRIX (rows=true, cols=predicted) ==="])
-        w.writerow([""] + names)
+        w.writerow([""] + pred_names)
         for i, row in enumerate(conf):
             w.writerow([names[i]] + list(row))
         w.writerow([])
@@ -991,75 +996,39 @@ def run_fruits262_3class_proof():
     refs_full, nm3, ns3 = build_references(TRAIN, spec5, extended=True)
     refs3 = refs_full[:3]  # Take only first 3 classes
 
-    cfg = SegmentationConfig(extended_features=True, max_side=480)
-    cfg.s_min = 0.15; cfg.v_min = 0.15
-    # Fruits-262 photos drift more from the studio-like Fruits-360 references.
-    # A slightly looser rejection radius keeps real bananas/cherries from being
-    # dropped as background while still rejecting obvious mismatches.
-    cfg.reject_z = 1.6
-    cfg.expand_masks = True; cfg.expand_hue_tol = 0.28
-    cfg.expand_s_min = 0.15; cfg.expand_v_min = 0.15
-    cfg.expand_min_seed_area = 200; cfg.fill_components = False
-    cfg.refine_masks = True; cfg.refine_hue_tol = 0.40
+    cfg = make_scene_cfg(3)
+    cfg.max_side = 480
+    cfg.s_min = 0.12; cfg.v_min = 0.12
     cfg.hue_thresh = 0.20; cfg.sat_thresh = 0.08
-    cfg.morph_radius = 3; cfg.min_area = 100
+    cfg.refine_hue_tol = 0.40
+    cfg.expand_hue_tol = 0.28
+    cfg.min_class_fraction = 0.0
 
     candidates = [
-        ("cherry", 0, "Cherry"),
-        ("orange", 1, "Orange"),
-        ("banana", 2, "Banana"),
+        ("cherry", "1.jpg", 0, "Cherry"),
+        ("orange", "1.jpg", 1, "Orange"),
+        ("banana", "1.jpg", 2, "Banana"),
     ]
 
     target_h = 300
     orig_panels, ov_panels, labels, colors = [], [], [], []
 
-    for folder, cidx, name in candidates:
+    for folder, fname, cidx, name in candidates:
         folder_path = os.path.join(F262, folder)
         if not os.path.isdir(folder_path):
             print(f"  SKIP {name} — folder not found")
             continue
-
-        imgs = sorted(
-            [f for f in os.listdir(folder_path) if f.lower().endswith((".jpg", ".png"))],
-            key=lambda f: int(os.path.splitext(f)[0])
-            if os.path.splitext(f)[0].isdigit() else 0,
-        )
-        if not imgs:
-            print(f"  SKIP {name} — no images found")
+        p = os.path.join(folder_path, fname)
+        bgr = cv2.imread(p)
+        if bgr is None:
+            print(f"  SKIP {name} — image not found ({fname})")
             continue
-
-        best = None
-        chosen = None
-        chosen_file = imgs[0]
-
-        for fname in imgs[:15]:
-            p = os.path.join(folder_path, fname)
-            bgr = cv2.imread(p)
-            if bgr is None:
-                continue
-
-            scale = target_h / bgr.shape[0]
-            bgr = cv2.resize(bgr, (int(bgr.shape[1] * scale), target_h))
-
-            res = segment_image(bgr, refs3, nm3, ns3, cfg)
-            pred_idx = _dominant_idx(res["class_map"], len(refs3))
-            pred_name = refs3[pred_idx].name if pred_idx >= 0 else "background"
-            labeled_px = int((res["class_map"] >= 0).sum())
-            candidate = (labeled_px, bgr, res, fname, pred_name)
-
-            if best is None or labeled_px > best[0]:
-                best = candidate
-            if pred_name.lower() == name.lower():
-                chosen = candidate
-                break
-
-        if chosen is None:
-            if best is None:
-                print(f"  SKIP {name} — no readable images")
-                continue
-            chosen = best
-
-        _score, bgr, res, chosen_file, pred_name = chosen
+        scale = target_h / bgr.shape[0]
+        bgr = cv2.resize(bgr, (int(bgr.shape[1] * scale), target_h))
+        chosen_file = fname
+        res = segment_image(bgr, refs3, nm3, ns3, cfg)
+        pred_idx = _dominant_idx(res["class_map"], len(refs3))
+        pred_name = refs3[pred_idx].name if pred_idx >= 0 else "background"
         ov = _smooth_class_overlay(bgr, res["class_map"], refs3)
         ok = name.lower() == pred_name.lower()
         print(f"  {name:8s}  predicted: {pred_name:8s}  {'✓' if ok else '✗'}  ({chosen_file})")
@@ -1126,9 +1095,9 @@ def run_fruits262_3class_proof():
     #    the 3-class pipeline on it — this produces the "similar to the above
     #    figure" result required by step 11.
     if len(orig_panels) == 3:
-        # Keep the composite slightly larger than the poster thumbnails so the
-        # small cherry region is not lost during the second resize.
-        target_h2 = 320
+        # Keep the composite large enough that the small cherry panel survives
+        # the second resize used to build the stitched scene.
+        target_h2 = 400
         panels_resized = []
         for bgr_p in orig_panels:
             sc = target_h2 / bgr_p.shape[0]
@@ -1171,21 +1140,20 @@ F262_CLASSES = [
     ("avocado",   "Avocado",      "#1A7A1A", (0,  200,   0)),   # vivid green
     ("raspberry", "Raspberry",    "#7B00CC", (200, 0,  200)),   # vivid magenta
     ("lychee",    "Lychee",       "#CC4488", (255, 80, 180)),   # vivid pink
-    ("cherry",    "Cherry Black", "#550055", (255,  0,   80)),   # vivid blue-purple
+    ("cherry",    "Cherry",       "#B22222", (0,   0, 180)),     # vivid red
 ]
 
 
 def _make_f262_cfg():
     """Config for Fruits-262 natural photos: relaxed thresholds for better detection."""
-    cfg = SegmentationConfig(extended_features=True, max_side=480)
-    cfg.s_min = 0.10; cfg.v_min = 0.10; cfg.v_max = 1.0
+    cfg = make_scene_cfg(10)
+    cfg.max_side = 480
+    cfg.s_min = 0.12; cfg.v_min = 0.12; cfg.v_max = 1.0
     cfg.tau_e = 0.10; cfg.hue_thresh = 0.22; cfg.sat_thresh = 0.10
-    cfg.merged_var_h = 0.08; cfg.merged_var_s = 0.03; cfg.edge_veto = 0.20
-    cfg.reject_z = 1.0; cfg.min_area = 100; cfg.morph_radius = 3
-    cfg.refine_masks = True; cfg.refine_hue_tol = 0.40; cfg.fill_components = False
-    cfg.expand_masks = True; cfg.expand_hue_tol = 0.28
-    cfg.expand_s_min = 0.15; cfg.expand_v_min = 0.15
-    cfg.expand_min_seed_area = 200; cfg.min_class_fraction = 0.0
+    cfg.merged_var_h = 0.08; cfg.merged_var_s = 0.03
+    cfg.refine_hue_tol = 0.40
+    cfg.expand_hue_tol = 0.28
+    cfg.min_class_fraction = 0.0
     return cfg
 
 
@@ -1284,36 +1252,27 @@ def run_fruits262_demo(refs10, nmean10, nstd10):
             print(f"  SKIP {label} — no images found")
             continue
 
-        # Try first 15 images; prefer the first correctly-classified one,
-        # fall back to the one with the highest mean saturation.
+        # Choose a visually strong natural photo without peeking at the label
+        # outcome. This keeps the demo deterministic and avoids selecting
+        # samples only because the current classifier already got them right.
         bgr = None
         pick = imgs[0]
-        best_sat = -1.0
-        correct_bgr, correct_pick, correct_res = None, None, None
+        best_score = -1.0
 
         for candidate in imgs[:15]:
             tmp = cv2.imread(os.path.join(folder_path, candidate))
             if tmp is None:
                 continue
-            _, s_c, _ = to_hsv_float(tmp)
-            mean_sat = float(s_c.mean())
-            if mean_sat > best_sat:
-                best_sat = mean_sat
+            _h_c, s_c, v_c = to_hsv_float(tmp)
+            valid = (s_c >= cfg.s_min) & (v_c >= cfg.v_min)
+            score = float(valid.sum()) * float(s_c[valid].mean() if valid.any() else 0.0)
+            if score > best_score:
+                best_score = score
                 bgr, pick = tmp, candidate
-            if correct_bgr is None:
-                r = segment_image(tmp, refs10, nmean10, nstd10, cfg)
-                didx = _dominant_idx(r["class_map"], n_refs)
-                if didx >= 0:
-                    pname = refs10[didx].name
-                    if pname and (label.lower() in pname.lower()
-                                  or pname.lower() in label.lower()):
-                        correct_bgr, correct_pick, correct_res = tmp, candidate, r
-
-        if correct_bgr is not None:
-            bgr, pick = correct_bgr, correct_pick
-            res = correct_res
-        else:
-            res = segment_image(bgr, refs10, nmean10, nstd10, cfg)
+        if bgr is None:
+            print(f"  SKIP {label} — no readable images")
+            continue
+        res = segment_image(bgr, refs10, nmean10, nstd10, cfg)
         h_map, s_map, v_map = to_hsv_float(bgr)
 
         cm = res["class_map"]

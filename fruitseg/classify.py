@@ -28,6 +28,7 @@ class ClassReference:
     name: str
     color_bgr: tuple                  # overlay colour for this class
     mean_feature: np.ndarray = None   # mean feature vector (pre-normalisation)
+    std_feature: np.ndarray = None    # per-dimension spread from Train images
     n_images: int = 0
 
 
@@ -91,8 +92,11 @@ def build_references(train_dir, class_spec, extended=True, max_per_class=200):
         if not feats:
             continue
         feats = np.vstack(feats)
+        feat_std = feats.std(axis=0)
+        feat_std[feat_std < 1e-6] = 0.0
         ref = ClassReference(name=name, color_bgr=color,
                              mean_feature=feats.mean(axis=0),
+                             std_feature=feat_std,
                              n_images=len(feats))
         references.append(ref)
         all_feats.append(feats)
@@ -144,8 +148,13 @@ def classify_regions(region_stats, references, norm_mean, norm_std,
         if rs.n_valid < min_valid:
             assignments.append(-1)
             continue
-        f = ((rs.feature_vector(extended=extended) - norm_mean) / norm_std) * weights
-        d = np.linalg.norm(ref_feats - f[None, :], axis=1)
+        feat = ((rs.feature_vector(extended=extended) - norm_mean) / norm_std) * weights
+        d = np.linalg.norm(ref_feats - feat[None, :], axis=1)
         j = int(np.argmin(d))
-        assignments.append(j if d[j] <= reject_z else -1)
+        d1 = float(d[j])
+        d2 = float(np.partition(d, 1)[1]) if len(d) > 1 else np.inf
+        confident_margin = d2 - d1
+        adaptive_limit = reject_z * 1.25
+        accept = (d1 <= reject_z) or (d1 <= adaptive_limit and confident_margin >= 0.25)
+        assignments.append(j if accept else -1)
     return assignments

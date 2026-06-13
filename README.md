@@ -85,8 +85,11 @@ python scripts/run.py --train data/Fruits-360/Training \
 For the bonus, repeat with `--nfruits 5` and `--nfruits 10`. Edit the class
 folder names in `scripts/run.py` (`SPEC_10`) to match your Fruits-360 copy. Use
 Fruits-360 Test for validation, then use suitable `test-multiple_fruits` and
-Fruits-262 images as realistic testing scenes. Tune `SegmentationConfig` **on
-the Train set only**.
+Fruits-262 images as realistic testing scenes. The final segmentation logic is
+fixed from **Train-derived development only**: Fruits-360 Test is used only for
+quantitative validation, while `test-multiple_fruits` and Fruits-262 are used
+only as qualitative transfer tests. Tune `SegmentationConfig` **on the Train
+set only**.
 
 ## Data flow (one image)
 
