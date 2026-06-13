@@ -97,7 +97,7 @@ def make_config(nfruits, max_side, scene_tuning=False):
         cfg.refine_hue_tol = 0.35     # FIX: was 0.60 — trim regions to class-matching hue
         cfg.fill_components = False   # FIX: was True — interior fill floods the enclosed bowl
         cfg.expand_masks = True
-        cfg.expand_hue_tol = 0.25     # FIX: was 0.42 — stop Orange growing over apple cheeks
+        cfg.expand_hue_tol = 0.25     # FIX: was 0.42 — stop color bleeding at boundaries
         cfg.expand_s_min = 0.20       # FIX: was 0.08 — do not expand into desaturated basket/bg
         cfg.expand_v_min = 0.20       # FIX: was 0.10 — do not expand into dark regions
         cfg.expand_min_seed_area = 6000   # FIX: was 2500 — only very confident seeds expand
@@ -178,7 +178,7 @@ def main():
     cfg.extended_features = extended
 
     print(f"Building references for {len(spec)} fruits ...")
-    refs, nmean, nstd = build_references_for_run(args.train, spec, args.preset)
+    refs, nmean, nstd = build_references_for_run(args.train, spec)
     print("  built:", ", ".join(f"{r.name}({r.n_images})" for r in refs))
 
     if args.evaluate:

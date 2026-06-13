@@ -197,7 +197,7 @@ def run_dataset_exploration():
     f262_matching = []
     our_names_lower = {s[1].lower() for s in SPEC_10}
     # Also map common synonyms
-    synonym = {"cherry": "Cherry Black", "avocado": "Avocado",
+    synonym = {"cherry": "Cherry 1", "avocado": "Avocado",
                "orange": "Orange", "banana": "Banana", "raspberry": "Raspberry",
                "lychee": "Lychee"}
     for cls in f262_classes:
@@ -598,7 +598,7 @@ def draw_region_count_chart(n_split_main, n_merged_main):
     test_images = [
         ("banana_1.jpg",     "Banana scene"),
         ("cherry(wax)_1.jpg","Cherry scene"),
-        ("pear_1.jpg",       "Pear scene"),
+        ("orange_1.jpg",     "Orange scene"),
     ]
     cfg = make_scene_cfg()
     splits_all, merges_all, img_labels = [], [], []
@@ -825,7 +825,7 @@ def run_scene_demos(refs10, nmean10, nstd10):
     sp3 = _spec3(SPEC_10)
 
     demos = [
-        (os.path.join(MULTI, "cherry_12.jpg"),
+        (os.path.join(MULTI, "cherry_14.jpg"),
          10, SPEC_10, refs10, nmean10, nstd10,
          "cherry_scene_overlay.png", "Cherry scene  (10-class)"),
         (os.path.join(MULTI, "banana_1.jpg"),
@@ -991,12 +991,13 @@ def run_fruits262_3class_proof():
 
     cfg = SegmentationConfig(extended_features=True, max_side=480)
     cfg.s_min = 0.15; cfg.v_min = 0.15
-    cfg.reject_z = 1.4
-    cfg.expand_masks = True; cfg.expand_hue_tol = 0.25
-    cfg.expand_s_min = 0.20; cfg.expand_v_min = 0.20
-    cfg.expand_min_seed_area = 6000; cfg.fill_components = False
-    cfg.refine_masks = True; cfg.refine_hue_tol = 0.35
-    cfg.morph_radius = 3; cfg.min_area = 150
+    cfg.reject_z = 1.0
+    cfg.expand_masks = True; cfg.expand_hue_tol = 0.28
+    cfg.expand_s_min = 0.15; cfg.expand_v_min = 0.15
+    cfg.expand_min_seed_area = 200; cfg.fill_components = False
+    cfg.refine_masks = True; cfg.refine_hue_tol = 0.40
+    cfg.hue_thresh = 0.20; cfg.sat_thresh = 0.08
+    cfg.morph_radius = 3; cfg.min_area = 100
 
     # Best images identified from scan
     candidates = [
