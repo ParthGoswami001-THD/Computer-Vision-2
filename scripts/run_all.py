@@ -350,6 +350,8 @@ def run_pipeline_visualisation(refs, nmean, nstd):
             ax.axis("off")
 
         plt.tight_layout(rect=[0, 0, 1, 0.97])
+        # Ensure the graphs directory exists (in case earlier steps failed to create it)
+        os.makedirs(GRAPHS, exist_ok=True)
         out = os.path.join(GRAPHS, "pipeline_steps.png")
         fig.savefig(out, dpi=140, bbox_inches="tight", facecolor="white")
         plt.close(fig)
@@ -1319,8 +1321,10 @@ def run_fruits262_demo(refs10, nmean10, nstd10):
         cm = res["class_map"]
         didx = _dominant_idx(cm, n_refs)
         pred_str = refs10[didx].name if didx >= 0 else "background"
-        is_correct = (pred_str and (label.lower() in pred_str.lower()
-                                    or pred_str.lower() in label.lower()))
+        # Compare base class names (ignore trailing numeric suffix like " 1")
+        def _base(name):
+            return name.split()[0].lower() if name else ""
+        is_correct = (_base(label) == _base(pred_str))
         tick = "✓" if is_correct else "✗"
         print(f"  {label:14s}  predicted: {pred_str:14s} {tick}  ({pick})")
 
