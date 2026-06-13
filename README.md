@@ -1,312 +1,206 @@
 # HSV Split-and-Merge Fruit Segmentation
 
-**Computer Vision - Assignment 2 - Deggendorf Institute of Technology - Summer 2026**
+Classical fruit segmentation and classification for **Computer Vision Assignment 2**
+at Deggendorf Institute of Technology. The project uses an HSV-based split-and-merge
+pipeline, nearest-neighbour classification from Fruits-360 training images, and
+qualitative transfer tests on multi-fruit scenes and Fruits-262.
 
-A classical (non-deep-learning) fruit segmentation pipeline built on the HSV colour
-space. The core algorithm is a quadtree **split** followed by a greedy
-Region-Adjacency-Graph **merge**, extended with Sobel-driven splitting, edge-aware
-merging, circular hue statistics, z-scored nearest-neighbour classification with
-rejection, and morphological post-processing -- all implemented in NumPy without
-library segmentation functions.
+## Overview
 
----
+This repository implements:
 
-## Results
+- RGB/BGR to HSV conversion with a luminance and saturation guard mask
+- Own-code quadtree split phase with at least 16 initial regions
+- Own-code region-adjacency merge phase
+- Region classification from Fruits-360 training references
+- Quantitative evaluation on the Fruits-360 Test split
+- Qualitative overlays for `test-multiple_fruits` and Fruits-262
 
-| Configuration | Classes | Test images | Correct | Accuracy |
-|---|---|---|---|---|
-| 3-class | Cherry, Orange, Banana | 180 | 180 | **100.0%** |
-| 5-class | + Avocado, Cucumber | 290 | 290 | **100.0%** |
-| 10-class | full set | 590 | 586 | **99.3%** |
+The main goal is to satisfy the assignment's classical-image-processing requirement
+without relying on deep learning or library segmentation functions.
 
-10-class per-class metrics (Fruits-360 Test):
+## Current Results
 
-| Class | Precision | Recall | F1 | Train images |
-|---|---|---|---|---|
-| Cherry | 1.000 | 1.000 | 1.000 | 200 |
-| Orange | 1.000 | 1.000 | 1.000 | 200 |
-| Banana | 1.000 | 1.000 | 1.000 | 200 |
-| Avocado | 1.000 | 0.983 | 0.992 | 200 |
-| Cucumber | 0.943 | 1.000 | 0.971 | 150 |
-| Cherry Black | 1.000 | 1.000 | 1.000 | 200 |
-| Cucumber 3 | 1.000 | 0.950 | 0.974 | 200 |
-| Huckleberry | 0.984 | 1.000 | 0.992 | 200 |
-| Raspberry | 1.000 | 1.000 | 1.000 | 200 |
-| Lychee | 1.000 | 1.000 | 1.000 | 200 |
+These figures come from the checked-in CSV reports in `results/`:
 
-The 4 errors at 10-class all occur at known hue-overlap boundaries:
-Avocado/Cucumber (yellow-green zone) and Cucumber 3 at the green-cyan boundary.
+| Configuration | Classes | Accuracy |
+|---|---|---:|
+| 3-class | Cherry, Orange, Banana | 100.0% |
+| 5-class | + Avocado, Cucumber | 100.0% |
+| 10-class | full set | 99.3% |
 
----
+Representative outputs:
 
-## Project structure
+- [Pipeline steps](/home/divine/Documents/Computer-Vision-2/results/graphs/pipeline_steps.png)
+- [3-class Fruits-262 proof](/home/divine/Documents/Computer-Vision-2/results/fruits262_3class_proof.png)
+- [3-class Fruits-262 composite scene](/home/divine/Documents/Computer-Vision-2/results/fruits262_3class_scene.png)
+- [10-class multi-fruit overlay](/home/divine/Documents/Computer-Vision-2/results/multi_fruit_overlay.png)
 
-```
+## Selected Classes
+
+The current class ranking in [scripts/run.py](/home/divine/Documents/Computer-Vision-2/scripts/run.py:53) is:
+
+1. `Cherry 1` -> Cherry
+2. `Orange 1` -> Orange
+3. `Banana 1` -> Banana
+4. `Avocado 1` -> Avocado
+5. `Cucumber 1` -> Cucumber
+6. `Cherry Wax Black 1` -> Cherry Black
+7. `Cucumber 3` -> Cucumber 3
+8. `Huckleberry 1` -> Huckleberry
+9. `Raspberry 1` -> Raspberry
+10. `Lychee 1` -> Lychee
+
+The first 3 classes form the starter set, the first 5 extend into green hues, and
+the full 10-class set covers most of the HSV colour wheel while intentionally keeping
+some harder boundary cases for analysis.
+
+## Repository Layout
+
+```text
 Computer-Vision-2/
-|
-+-- fruitseg/                    # importable library package
-|   +-- __init__.py              # public API, version
-|   +-- color_space.py           # (wl) RGB->HSV  (oc) guard_mask, circular_mean/variance
-|   +-- preprocessing.py         # (oc) median_filter, gaussian_lowpass, sobel_edges
-|   +-- split_merge.py           # (oc) split_quadtree, merge_regions  <- core algorithm
-|   +-- features.py              # (oc) RegionStats, region_features, feature vectors
-|   +-- classify.py              # (oc) build_references, classify_regions (z-scored NN)
-|   +-- postprocess.py           # (oc) disk morphology, area_filter, connected components
-|   +-- pipeline.py              # segment_image, SegmentationConfig, add_legend
-|   +-- evaluation.py            # evaluate_classification, confusion matrix, F1
-|
-+-- scripts/
-|   +-- run.py                   # evaluate on Test folder or segment a single image
-|   +-- run_all.py               # produce all results, graphs, and overlays in one shot
-|   +-- selftest.py              # synthetic end-to-end test (no dataset needed)
-|   +-- make_slides.py           # generate results/presentation.pdf (15 slides)
-|
-+-- docs/
-|   +-- ALGORITHM.md             # full algorithm description + IEEE references
-|   +-- USAGE.md                 # parameter-tuning guide + advanced usage
-|   +-- report.md                # research document (abstract to conclusion)
-|
-+-- results/
-|   +-- eval_3fruit.csv          # confusion matrix + metrics, 3-class
-|   +-- eval_5fruit.csv          # confusion matrix + metrics, 5-class
-|   +-- eval_10fruit.csv         # confusion matrix + metrics, 10-class
-|   +-- presentation.pdf         # generated slide deck (15 slides)
-|   +-- graphs/                  # accuracy bars, confusion heatmaps, pipeline steps
-|   +-- *.png                    # scene overlay images
-|
-+-- data/                        # datasets (not version-controlled)
-|   +-- Fruits-360/
-|   |   +-- fruits-360_100x100/fruits-360/Training/   # training images (100x100)
-|   |   +-- fruits-360_100x100/fruits-360/Test/        # test images
-|   |   +-- fruits-360_multi/test-multiple_fruits/     # multi-fruit scenes
-|   +-- Fruits-262/Fruit-262/                          # natural-environment photos
-|
-+-- requirements.txt
-+-- pyproject.toml               # pip install -e . installs the fruitseg package
-+-- README.md
+├── fruitseg/
+│   ├── color_space.py
+│   ├── preprocessing.py
+│   ├── split_merge.py
+│   ├── features.py
+│   ├── classify.py
+│   ├── postprocess.py
+│   ├── pipeline.py
+│   └── evaluation.py
+├── scripts/
+│   ├── run.py
+│   ├── run_all.py
+│   ├── selftest.py
+│   └── make_research_pdf.py
+├── docs/
+│   ├── ALGORITHM.md
+│   ├── USAGE.md
+│   └── report.md
+├── results/
+│   ├── eval_3fruit.csv
+│   ├── eval_5fruit.csv
+│   ├── eval_10fruit.csv
+│   └── graphs/
+└── data/
 ```
-
-`(wl)` = library call allowed (NumPy / OpenCV / SciPy)
-`(oc)` = own code -- only basic NumPy array operations, no library segmentation
-
----
-
-## Algorithm pipeline
-
-```
-BGR image
-  -> median filter (5x5, oc)
-  -> Gaussian low-pass (sigma=1.5, oc)
-  -> RGB->HSV (wl: cv2.cvtColor)
-  -> guard mask: exclude dark/achromatic pixels where hue is undefined (oc)
-  -> Sobel edge map (oc)
-  -> SPLIT: quadtree, forced depth>=2 (>=16 start regions) (oc)
-  -> MERGE: RAG, greedy most-similar-first, edge-aware veto (oc)
-  -> feature vectors: 7-D [cos(H), sin(H), mean_S, circ_var_H, var_S, mean_V, 0] (oc)
-  -> z-scored weighted NN classification with rejection (oc)
-  -> per-class morphological opening + closing (disk SE, oc)
-  -> 8-connected area filter (BFS, oc)
-  -> colour overlay output
-```
-
-Key extensions beyond the minimal baseline:
-
-- **Circular hue statistics** -- mean and variance computed via cos/sin encoding
-  so the 0/360 degree wrap-around is handled correctly (Mardia & Jupp, 2000)
-- **Sobel integration** in both split (edge criterion tau_E) and merge (edge veto)
-  to align region boundaries with real object edges
-- **Z-scored weighted NN** with per-dimension weights and a rejection threshold --
-  regions too far from every class reference are labelled background (-1)
-- **Own-code morphology** using disk structuring elements built with NumPy stride
-  tricks; no cv2 morphology functions are used
-
----
-
-## Class selection (10 classes)
-
-Classes were chosen to maximise hue spread across the colour wheel while keeping
-mean saturation above 0.40. Ramping strategy: 3 -> 5 -> 10 classes, each increment
-adding classes that are separable from the existing set.
-
-| # | Folder (Fruits-360) | Display name | Mean hue |
-|---|---------------------|--------------|----------|
-| 1 | Cherry 1 | Cherry | ~358 deg |
-| 2 | Orange 1 | Orange | ~27 deg |
-| 3 | Banana 1 | Banana | ~46 deg |
-| 4 | Avocado 1 | Avocado | ~71 deg |
-| 5 | Cucumber 1 | Cucumber | ~104 deg |
-| 6 | Cherry Wax Black 1 | Cherry Black | ~314 deg |
-| 7 | Cucumber 3 | Cucumber 3 | ~187 deg |
-| 8 | Huckleberry 1 | Huckleberry | ~221 deg |
-| 9 | Raspberry 1 | Raspberry | ~274 deg |
-| 10 | Lychee 1 | Lychee | ~3 deg |
-
-Edit `SPEC_10` in `scripts/run.py` to change the selection. Folder names must
-match your local Fruits-360 copy exactly.
-
----
 
 ## Installation
 
 ```bash
-# from the project root
 pip install -r requirements.txt
-
-# optional: install the fruitseg package for clean imports anywhere
 pip install -e .
-
-# make_slides.py also needs matplotlib
-pip install matplotlib
 ```
 
-Python 3.9+ required. Tested on Python 3.11 and 3.14.
+Python `>=3.9` is required.
 
----
+## Dataset Layout
 
-## Quick self-test (no dataset needed)
+The scripts accept either the direct `Training` / `Test` folders or the shorter
+dataset root and resolve the common nested Fruits-360 structure automatically.
 
-Builds synthetic solid-colour fruit blobs, runs every pipeline stage, and prints
-a small confusion matrix -- verifies the full code path without any real data:
+Expected layout:
+
+```text
+data/
+├── Fruits-360/
+│   ├── fruits-360_100x100/fruits-360/Training/
+│   ├── fruits-360_100x100/fruits-360/Test/
+│   └── fruits-360_multi/test-multiple_fruits/
+└── Fruits-262/Fruit-262/
+```
+
+## How To Run
+
+Quick self-test:
 
 ```bash
 python scripts/selftest.py
 ```
 
-Expected output ends with: `SELF-TEST COMPLETE -- all modules executed.`
-
----
-
-## Running on the real dataset
-
-### Dataset layout
-
-The Fruits-360 download unpacks to a nested directory. `run.py` auto-detects
-the real Training/Test path from a short root, so both forms work:
-
-```
-data/Fruits-360                                             <- short root (pass this)
-data/Fruits-360/fruits-360_100x100/fruits-360/Training     <- resolved Training path
-data/Fruits-360/fruits-360_100x100/fruits-360/Test         <- resolved Test path
-```
-
-### 1. Evaluate on Fruits-360 Test (confusion matrix)
+3-class evaluation:
 
 ```bash
-# 3-class
-python scripts/run.py --train data/Fruits-360 --test data/Fruits-360 \
+python scripts/run.py --train data/Fruits-360 \
+                      --test data/Fruits-360 \
                       --evaluate --nfruits 3
-
-# 5-class
-python scripts/run.py --train data/Fruits-360 --test data/Fruits-360 \
-                      --evaluate --nfruits 5
-
-# 10-class
-python scripts/run.py --train data/Fruits-360 --test data/Fruits-360 \
-                      --evaluate --nfruits 10
-
-# save a CSV report alongside the console output
-python scripts/run.py --train data/Fruits-360 --test data/Fruits-360 \
-                      --evaluate --nfruits 10 --save-report results/my_10class.csv
 ```
 
-### 2. Segment a single image (scene overlay)
+5-class evaluation:
 
 ```bash
-# multi-fruit scene (3-class)
 python scripts/run.py --train data/Fruits-360 \
-    --image "data/Fruits-360/fruits-360_multi/test-multiple_fruits/cherry_in_the_basket.jpg" \
-    --out results/overlay.png --nfruits 3
-
-# Fruits-262 cross-dataset demo
-python scripts/run.py --train data/Fruits-360 \
-    --image data/Fruits-262/Fruit-262/cherry/cherry_1.jpg \
-    --out results/f262_overlay.png --nfruits 3
+                      --test data/Fruits-360 \
+                      --evaluate --nfruits 5
 ```
 
-Single-image runs use a scene-tuned parameter preset (relaxed thresholds, mask
-expansion). Pass `--no-scene-tuning` to use the base evaluation config instead.
+10-class evaluation:
 
-### 3. Produce all results at once
+```bash
+python scripts/run.py --train data/Fruits-360 \
+                      --test data/Fruits-360 \
+                      --evaluate --nfruits 10
+```
+
+Single-image overlay:
+
+```bash
+python scripts/run.py --train data/Fruits-360 \
+                      --image "data/Fruits-360/fruits-360_multi/test-multiple_fruits/cherry_in_the_basket.jpg" \
+                      --out results/overlay.png \
+                      --nfruits 3
+```
+
+Generate all assignment outputs:
 
 ```bash
 python scripts/run_all.py
 ```
 
-Generates in one run: confusion-matrix heatmaps, per-class bar charts, accuracy
-comparison graph, scene overlay images, hue-distribution plot, region-count table,
-and all CSV reports. Output goes to `results/` and `results/graphs/`.
-
-### 4. Generate the presentation PDF
+Build the research PDF from the markdown report:
 
 ```bash
-python scripts/make_slides.py --out results/presentation.pdf
-
-# also export individual slides as PNGs
-python scripts/make_slides.py --out results/presentation.pdf \
-                              --png-dir results/slides/
+python scripts/make_research_pdf.py
 ```
 
----
+## Method Summary
 
-## CLI reference -- scripts/run.py
+The processing chain is:
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--train PATH` | required | Fruits-360 root or Training folder |
-| `--test PATH` | -- | Fruits-360 root or Test folder (needed for `--evaluate`) |
-| `--evaluate` | off | Run confusion-matrix evaluation on Test folder |
-| `--nfruits N` | 3 | Number of classes: 3, 5, or 10 |
-| `--image PATH` | -- | Segment a single image and write an overlay |
-| `--out PATH` | `results/overlay.png` | Output path for `--image` runs |
-| `--max-side N` | 480 | Resize longest image side to N before processing (0 = off) |
-| `--no-scene-tuning` | off | Use base config instead of scene preset for `--image` |
-| `--save-report PATH` | -- | Write CSV report (confusion matrix + metrics) |
-| `--no-file-list` | off | Suppress per-file listing in console output |
+1. Median and Gaussian smoothing
+2. HSV conversion
+3. Guard-mask construction on saturation and value
+4. Sobel edge extraction
+5. Quadtree split using hue/saturation homogeneity
+6. Region-adjacency merge with edge-aware veto
+7. Feature extraction from merged regions
+8. Z-scored nearest-neighbour classification with background rejection
+9. Morphological cleanup and area filtering
+10. Overlay rendering
 
----
+The split-and-merge core and the region statistics are own-code. OpenCV is used
+for image I/O and colour conversion only.
 
-## Key parameters -- SegmentationConfig
+## Important Assignment Notes
 
-All thresholds live in `fruitseg/pipeline.py`. **Tune on the Training set only.**
+- Tune using **Fruits-360 Training** only.
+- Use **Fruits-360 Test** as the quantitative validation set.
+- Treat `test-multiple_fruits` and **Fruits-262** as qualitative transfer tests.
+- Do not present qualitative scene tuning as quantitative evaluation.
 
-| Parameter | Default | Effect |
-|-----------|---------|--------|
-| `s_min`, `v_min` | 0.15, 0.15 | Guard mask -- exclude achromatic / dark pixels |
-| `tau_h` | 0.05 | Split: max circular hue variance in a block |
-| `tau_s` | 0.02 | Split: max saturation variance in a block |
-| `tau_e` | 0.15 | Split: max mean Sobel energy in a block |
-| `min_size` | 4 | Min block side length before stopping split |
-| `min_start_depth` | 2 | Forced depth (2 -> >=16 start regions) |
-| `hue_thresh` | 0.30 | Merge: max circular hue distance between regions |
-| `sat_thresh` | 0.15 | Merge: max saturation mean distance between regions |
-| `merged_var_h` | 0.08 | Merge: max hue variance of merged region |
-| `merged_var_s` | 0.03 | Merge: max saturation variance of merged region |
-| `edge_veto` | 0.35 | Merge: block if shared-boundary Sobel exceeds this |
-| `reject_z` | 1.8 | Classification rejection radius (weighted z-score units) |
-| `morph_radius` | 3 | Disk radius for morphological opening/closing |
-| `min_area` | 150 | Drop connected components smaller than this (pixels) |
-| `max_side` | 320 | Resize longest side before processing (0 = off) |
+## Limitations
 
----
+- Colour is the dominant cue, so hue overlap remains the main failure mode.
+- Quadtree boundaries can look blocky on curved fruit edges.
+- Thresholds that work well on clean Fruits-360 images transfer less reliably to
+  cluttered real scenes.
+- Very dark, reflective, or heavily occluded fruit regions can be rejected by the
+  guard mask and classified as background.
+- The system is closed-set: an unknown fruit may be mapped to the nearest known class.
 
 ## Documentation
 
-| File | Contents |
-|------|----------|
-| `docs/ALGORITHM.md` | Full algorithm description with IEEE references [1]-[10] |
-| `docs/USAGE.md` | Parameter-tuning guide, reporting methodology, advanced usage |
-| `docs/report.md` | Full research document (abstract, methodology, results, limitations) |
-| `results/presentation.pdf` | 15-slide PDF: pipeline, results, limitations |
-
----
-
-## Academic integrity
-
-This is a reference implementation to **study and defend**. The assignment awards
-0 points to both team members if any `(oc)` module cannot be explained from first
-principles. Walk through `split_merge.py`, the circular statistics in
-`color_space.py`, and the z-score logic in `classify.py` until you can derive
-each step independently.
-
-**Tuning rule**: Use only the Fruits-360 Training folder to set thresholds.
-Using the Test set or Fruits-262 for parameter tuning is academic misconduct.
+- Algorithm details: [docs/ALGORITHM.md](/home/divine/Documents/Computer-Vision-2/docs/ALGORITHM.md)
+- Usage guide: [docs/USAGE.md](/home/divine/Documents/Computer-Vision-2/docs/USAGE.md)
+- Research report source: [docs/report.md](/home/divine/Documents/Computer-Vision-2/docs/report.md)
+- Generated report PDF: [docs/research_report.pdf](/home/divine/Documents/Computer-Vision-2/docs/research_report.pdf)
