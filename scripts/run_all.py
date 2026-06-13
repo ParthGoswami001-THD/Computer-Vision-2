@@ -798,7 +798,7 @@ def _save_overlay(bgr_src, res, refs, out_path, detected_only=True):
 def run_3class_scene_demo(refs3, nmean3, nstd3):
     """
     Assignment step 9: run the 3-class algorithm on test-multiple_fruits images
-    that contain Apple, Orange or Banana to satisfy the multi-fruit scene
+    that contain Cherry, Orange or Banana to satisfy the multi-fruit scene
     requirement for split-and-merge.
     """
     print("\n" + "═"*70)
@@ -806,8 +806,8 @@ def run_3class_scene_demo(refs3, nmean3, nstd3):
     print("═"*70)
 
     scene_files = [
-        ("apple_orange_2.jpg",  "Apple + Orange scene"),
-        ("apple_orange_3.jpg",  "Apple + Orange scene (2)"),
+        ("cherry_1.jpg",        "Cherry scene"),
+        ("orange_5.jpg",        "Orange scene"),
         ("banana_orange.jpg",   "Banana + Orange scene"),
     ]
     cfg = make_scene_cfg(3)
