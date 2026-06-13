@@ -986,8 +986,10 @@ def run_fruits262_3class_proof():
     print("═"*70)
 
     # 3-class spec — same ordering as SPEC_3 so refs index matches
-    spec3 = _spec3(SPEC_3)
-    refs3, nm3, ns3 = build_references(TRAIN, spec3, extended=True)
+    # Use 5-class normalization context for consistency with assignment spec
+    spec5 = _spec3(SPEC_5)
+    refs_full, nm3, ns3 = build_references(TRAIN, spec5, extended=True)
+    refs3 = refs_full[:3]  # Take only first 3 classes
 
     cfg = SegmentationConfig(extended_features=True, max_side=480)
     cfg.s_min = 0.15; cfg.v_min = 0.15
@@ -1139,16 +1141,16 @@ F262_CLASSES = [
 
 
 def _make_f262_cfg():
-    """Config for Fruits-262 natural photos: conservative expansion, no fill."""
+    """Config for Fruits-262 natural photos: relaxed thresholds for better detection."""
     cfg = SegmentationConfig(extended_features=True, max_side=480)
-    cfg.s_min = 0.15; cfg.v_min = 0.15; cfg.v_max = 1.0
-    cfg.tau_e = 0.08; cfg.hue_thresh = 0.25; cfg.sat_thresh = 0.12
-    cfg.merged_var_h = 0.06; cfg.merged_var_s = 0.025; cfg.edge_veto = 0.25
-    cfg.reject_z = 1.4; cfg.min_area = 150; cfg.morph_radius = 4
-    cfg.refine_masks = True; cfg.refine_hue_tol = 0.35; cfg.fill_components = False
-    cfg.expand_masks = True; cfg.expand_hue_tol = 0.25
-    cfg.expand_s_min = 0.20; cfg.expand_v_min = 0.20
-    cfg.expand_min_seed_area = 6000; cfg.min_class_fraction = 0.0
+    cfg.s_min = 0.10; cfg.v_min = 0.10; cfg.v_max = 1.0
+    cfg.tau_e = 0.10; cfg.hue_thresh = 0.22; cfg.sat_thresh = 0.10
+    cfg.merged_var_h = 0.08; cfg.merged_var_s = 0.03; cfg.edge_veto = 0.20
+    cfg.reject_z = 1.0; cfg.min_area = 100; cfg.morph_radius = 3
+    cfg.refine_masks = True; cfg.refine_hue_tol = 0.40; cfg.fill_components = False
+    cfg.expand_masks = True; cfg.expand_hue_tol = 0.28
+    cfg.expand_s_min = 0.15; cfg.expand_v_min = 0.15
+    cfg.expand_min_seed_area = 200; cfg.min_class_fraction = 0.0
     return cfg
 
 
