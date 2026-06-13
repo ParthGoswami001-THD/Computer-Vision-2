@@ -51,20 +51,9 @@ SPEC_10 = [
     ("Lychee 1",           "Lychee",       (180, 180, 255)),   # pale red/bright
 ]
 
-MIXED_BOWL_SPEC = [
-    ("Apple Red 1",   "Apple",       (0, 0, 255)),
-    ("Apricot 1",     "Apricot",     (0, 150, 255)),
-    ("Peach 1",       "Peach",       (40, 170, 255)),
-    ("Peach Flat 1",  "Peach Flat",  (80, 190, 255)),
-    ("Pear 1",        "Pear",        (120, 220, 180)),
-    ("Plum 1",        "Plum",        (180, 60, 180)),
-]
 
-
-def get_spec(nfruits, preset="assignment"):
+def get_spec(nfruits):
     """!Return the class spec for 3, 5, or 10 fruits."""
-    if preset == "mixed-bowl":
-        return MIXED_BOWL_SPEC
     if nfruits == 3:
         return SPEC_10[:3]
     if nfruits == 5:
@@ -74,13 +63,13 @@ def get_spec(nfruits, preset="assignment"):
     raise ValueError("nfruits must be 3, 5, or 10")
 
 
-def build_references_for_run(train_dir, spec, preset="assignment"):
+def build_references_for_run(train_dir, spec):
     """Build class references with a stable normalization context.
 
     The 3-class assignment set uses the richer 5-class z-score context so the
     starter classes are normalised consistently with the 5-fruit validation.
     """
-    if preset == "assignment" and len(spec) == 3:
+    if len(spec) == 3:
         refs, nmean, nstd = build_references(train_dir, SPEC_10[:5],
                                              extended=True)
         return refs[:3], nmean, nstd
@@ -172,9 +161,6 @@ def main():
     ap.add_argument("--test", help="Fruits-360 Test folder (for --evaluate)")
     ap.add_argument("--evaluate", action="store_true", help="run Test-folder evaluation")
     ap.add_argument("--nfruits", type=int, default=3, choices=[3, 5, 10])
-    ap.add_argument("--preset", default="assignment",
-                    choices=["assignment", "mixed-bowl"],
-                    help="class set to use; mixed-bowl uses Apple/Apricot/Peach/Pear/Plum references")
     ap.add_argument("--max-side", type=int, default=480)
     ap.add_argument("--no-scene-tuning", action="store_true",
                     help="use the base Train/Test config for --image overlays")
@@ -184,16 +170,12 @@ def main():
                     help="suppress per-file correct/wrong listing in the console output")
     args = ap.parse_args()
 
-    spec = get_spec(args.nfruits, args.preset)
+    spec = get_spec(args.nfruits)
     # Always use the richer feature set. The baseline [cos_h, sin_h, var_s]
     # relies mostly on hue; the extended features add saturation/value statistics.
     extended = True
     cfg = make_config(len(spec), args.max_side, scene_tuning=False)
     cfg.extended_features = extended
-    if args.preset == "mixed-bowl":
-        cfg.refine_hue_tol = 0.65
-        cfg.reject_z = 1.8
-        cfg.min_area = 500
 
     print(f"Building references for {len(spec)} fruits ...")
     refs, nmean, nstd = build_references_for_run(args.train, spec, args.preset)
@@ -216,10 +198,6 @@ def main():
         scene_cfg = make_config(len(spec), args.max_side,
                                 scene_tuning=not args.no_scene_tuning)
         scene_cfg.extended_features = extended
-        if args.preset == "mixed-bowl":
-            scene_cfg.refine_hue_tol = 0.65
-            scene_cfg.reject_z = 1.8
-            scene_cfg.min_area = 500
         res = segment_image(img, refs, nmean, nstd, scene_cfg)
         detected_refs = [
             ref for i, ref in enumerate(refs)

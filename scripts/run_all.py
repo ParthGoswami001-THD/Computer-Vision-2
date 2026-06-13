@@ -67,16 +67,6 @@ SPEC_10 = [
 SPEC_3  = SPEC_10[:3]
 SPEC_5  = SPEC_10[:5]
 
-MIXED_BOWL_SPEC = [
-    ("Apple Red 1",   "Apple",      (0,   0, 255), "#B22222"),
-    ("Apricot 1",     "Apricot",    (0, 150, 255), "#FF7518"),
-    ("Peach 1",       "Peach",      (40, 170, 255), "#FFCBA4"),
-    ("Peach Flat 1",  "Peach Flat", (80, 190, 255), "#FFB347"),
-    ("Pear 1",        "Pear",       (120, 220, 180), "#D4E157"),
-    ("Plum 1",        "Plum",       (180,  60, 180), "#8B0057"),
-    ("Pomegranate 1", "Pomegranate",(30,  30, 220), "#0000CD"),
-]
-
 PLT_STYLE = {
     "figure.facecolor": "white",
     "axes.facecolor":   "white",
@@ -99,7 +89,7 @@ def _spec3(spec): return [(f, n, tuple(int(c) for c in col)) for f,n,col,_ in sp
 # ── config helpers ────────────────────────────────────────────────────────────
 
 def make_eval_cfg(nfruits):
-    # Use the richer 7-D feature vector even for the 3-class run.  Apple and
+    # Use the richer 7-D feature vector even for the 3-class run.  Cherry and
     # Orange are too close in hue for the baseline [cos_h, sin_h, var_s] form.
     return SegmentationConfig(extended_features=True, max_side=320)
 
@@ -207,7 +197,7 @@ def run_dataset_exploration():
     f262_matching = []
     our_names_lower = {s[1].lower() for s in SPEC_10}
     # Also map common synonyms
-    synonym = {"cherry": "Cherry Black", "avocado": "Avocado", "apple": "Apple",
+    synonym = {"cherry": "Cherry Black", "avocado": "Avocado",
                "orange": "Orange", "banana": "Banana", "raspberry": "Raspberry",
                "lychee": "Lychee"}
     for cls in f262_classes:
@@ -606,7 +596,6 @@ def draw_region_count_chart(n_split_main, n_merged_main):
 
     # Run on a few images to get a spread
     test_images = [
-        ("apple_19.jpg",     "Apple scene"),
         ("banana_1.jpg",     "Banana scene"),
         ("cherry(wax)_1.jpg","Cherry scene"),
         ("pear_1.jpg",       "Pear scene"),
@@ -965,9 +954,8 @@ def draw_summary_poster(results_store):
                      fontsize=11, color="#111111", fontweight="bold", pad=5)
 
         for ci, (fname, title) in enumerate([
-            ("apple_scene_overlay.png",    "Apple scene"),
+            ("cherry_scene_overlay.png",   "Cherry scene"),
             ("banana_scene_overlay.png",   "Banana scene"),
-            ("mixed_bowl_overlay.png",     "Mixed bowl"),
             ("metrics_10fruit.png",        "10-class Precision / Recall / F1"),
         ]):
             ax = img_ax(2, ci)
@@ -988,7 +976,7 @@ def draw_summary_poster(results_store):
 def run_fruits262_3class_proof():
     """
     Assignment step 11: test the 3-class algorithm on Fruits-262 and save
-    a proof-of-concept image.  We stitch the best Apple / Orange / Banana
+    a proof-of-concept image.  We stitch the best Cherry / Orange / Banana
     images from Fruits-262 side-by-side to create a single multi-fruit scene,
     then run the 3-class pipeline on each individually and render the overlay
     side-by-side so the colour separation is clearly visible.
@@ -1012,7 +1000,7 @@ def run_fruits262_3class_proof():
 
     # Best images identified from scan
     candidates = [
-        ("apple",  "0.jpg",  0, "Apple"),
+        ("cherry", "0.jpg",  0, "Cherry"),
         ("orange", "1.jpg",  1, "Orange"),
         ("banana", "3.jpg",  2, "Banana"),
     ]
@@ -1057,11 +1045,11 @@ def run_fruits262_3class_proof():
             axes = np.array([[axes[0]], [axes[1]]])
 
         fig.suptitle(
-            "Fruits-262  —  3-Class Proof-of-Concept  (Apple / Orange / Banana)\n"
+            "Fruits-262  —  3-Class Proof-of-Concept  (Cherry / Orange / Banana)\n"
             "Classifier trained on Fruits-360 only — tested on real-world Fruits-262 images",
             fontsize=13, color="#111111", fontweight="bold", y=1.01)
 
-        hex_map = {"Apple": "#CC2200", "Orange": "#E07000", "Banana": "#C8A000"}
+        hex_map = {"Cherry": "#B22222", "Orange": "#E07000", "Banana": "#C8A000"}
 
         for col, (orig, ov, (true_name, pred_name, ok)) in enumerate(
                 zip(orig_panels, ov_panels, labels)):
@@ -1088,7 +1076,7 @@ def run_fruits262_3class_proof():
 
         # Legend patches
         patches = [mpatches.Patch(color=hex_map[n], label=n)
-                   for n in ["Apple", "Orange", "Banana"]]
+               for n in ["Cherry", "Orange", "Banana"]]
         fig.legend(handles=patches, loc="lower center", ncol=3,
                    fontsize=11, frameon=False, bbox_to_anchor=(0.5, -0.02))
 
@@ -1140,7 +1128,6 @@ def run_fruits262_3class_proof():
 # Overlay BGR colours are vivid and maximally distinct from each other so
 # every class is immediately recognisable as a different shade in the demo.
 F262_CLASSES = [
-    ("apple",     "Apple",        "#CC2200", (0,   0, 230)),   # vivid red
     ("orange",    "Orange",       "#E07000", (0,  130, 255)),   # vivid orange
     ("banana",    "Banana",       "#C8A000", (0,  230, 255)),   # vivid yellow
     ("avocado",   "Avocado",      "#1A7A1A", (0,  200,   0)),   # vivid green
